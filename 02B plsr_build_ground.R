@@ -1,5 +1,5 @@
 ## PLSR of fiber data
-setwd("C:/Users/kotha020/Dropbox/TraitModels2018/")
+setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 library(spectrolab)
 library(pls)
 library(ggplot2)
@@ -12,6 +12,8 @@ library(reshape2)
 
 ground_spec_agg_train<-readRDS("SavedResults/ground_spec_agg_train.rds")
 ground_spec_agg_test<-readRDS("SavedResults/ground_spec_agg_test.rds")
+
+source("Scripts/senesced-trait-models/useful_functions.R")
 
 ############################################
 ## build initial PLSR models for calibration data
@@ -193,7 +195,7 @@ for(i in 1:nreps){
   NDF_jack_val_pred<-as.vector(predict(NDF_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_NDF_ground)[,,1])
   NDF_jack_val_fit<-lm(NDF_jack_val_pred~meta(val_jack)$NDF)
   NDF_jack_stats[[i]]<-c(R2=summary(NDF_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(NDF_jack_val_fit$residuals))/length(NDF_jack_val_fit$residuals)),
+                         RMSE=RMSD(meta(val_jack)$NDF,NDF_jack_val_pred),
                          max.val=max(meta(val_jack)$NDF,na.rm=T),
                          min.val=min(meta(val_jack)$NDF,na.rm=T),
                          bias=mean(NDF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$NDF,na.rm=T))
@@ -201,7 +203,7 @@ for(i in 1:nreps){
   ADF_jack_val_pred<-as.vector(predict(ADF_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_ADF_ground)[,,1])
   ADF_jack_val_fit<-lm(ADF_jack_val_pred~meta(val_jack)$ADF)
   ADF_jack_stats[[i]]<-c(R2=summary(ADF_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(ADF_jack_val_fit$residuals))/length(ADF_jack_val_fit$residuals)),
+                         RMSE=RMSD(meta(val_jack)$ADF,ADF_jack_val_pred),
                          max.val=max(meta(val_jack)$ADF,na.rm=T),
                          min.val=min(meta(val_jack)$ADF,na.rm=T),
                          bias=mean(ADF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$ADF,na.rm=T))
@@ -209,7 +211,7 @@ for(i in 1:nreps){
   perC_jack_val_pred<-as.vector(predict(perC_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_ground)[,,1])
   perC_jack_val_fit<-lm(perC_jack_val_pred~meta(val_jack)$perC)
   perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(perC_jack_val_fit$residuals))/length(perC_jack_val_fit$residuals)),
+                          RMSE=RMSD(meta(val_jack)$perC,perC_jack_val_pred),
                          max.val=max(meta(val_jack)$perC,na.rm=T),
                          min.val=min(meta(val_jack)$perC,na.rm=T),
                          bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
@@ -217,7 +219,7 @@ for(i in 1:nreps){
   perN_jack_val_pred<-as.vector(predict(perN_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_ground)[,,1])
   perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
   perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(perN_jack_val_fit$residuals))/length(perN_jack_val_fit$residuals)),
+                          RMSE=RMSD(meta(val_jack)$perN,perN_jack_val_pred),
                          max.val=max(meta(val_jack)$perN,na.rm=T),
                          min.val=min(meta(val_jack)$perN,na.rm=T),
                          bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
@@ -225,7 +227,7 @@ for(i in 1:nreps){
   LMA_jack_val_pred<-as.vector(predict(LMA_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_ground)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
   LMA_jack_stats[[i]]<-c(R2=summary(LMA_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(LMA_jack_val_fit$residuals))/length(LMA_jack_val_fit$residuals)),
+                         RMSE=RMSD(meta(val_jack)$LMA,LMA_jack_val_pred),
                          max.val=max(meta(val_jack)$LMA,na.rm=T),
                          min.val=min(meta(val_jack)$LMA,na.rm=T),
                          bias=mean(LMA_jack_val_pred,na.rm=T)-mean(meta(val_jack)$LMA,na.rm=T))

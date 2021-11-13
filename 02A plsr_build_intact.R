@@ -1,5 +1,5 @@
 ## PLSR of fiber data
-setwd("C:/Users/kotha020/Dropbox/TraitModels2018/")
+setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 library(spectrolab)
 library(pls)
 library(ggplot2)
@@ -12,6 +12,8 @@ library(reshape2)
 
 intact_spec_agg_train<-readRDS("SavedResults/intact_spec_agg_train.rds")
 intact_spec_agg_test<-readRDS("SavedResults/intact_spec_agg_test.rds")
+
+source("Scripts/senesced-trait-models/useful_functions.R")
 
 #########################################
 ## train models
@@ -208,7 +210,7 @@ for(i in 1:nreps){
   NDF_jack_val_pred<-as.vector(predict(NDF_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_NDF_intact)[,,1])
   NDF_jack_val_fit<-lm(NDF_jack_val_pred~meta(val_jack)$NDF)
   NDF_jack_stats[[i]]<-c(R2=summary(NDF_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(NDF_jack_val_fit$residuals))/length(NDF_jack_val_fit$residuals)),
+                         RMSE=RMSD(meta(val_jack)$NDF,NDF_jack_val_pred),
                          max.val=max(meta(val_jack)$NDF,na.rm=T),
                          min.val=min(meta(val_jack)$NDF,na.rm=T),
                          bias=mean(NDF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$NDF,na.rm=T))
@@ -216,7 +218,7 @@ for(i in 1:nreps){
   ADF_jack_val_pred<-as.vector(predict(ADF_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_ADF_intact)[,,1])
   ADF_jack_val_fit<-lm(ADF_jack_val_pred~meta(val_jack)$ADF)
   ADF_jack_stats[[i]]<-c(R2=summary(ADF_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(ADF_jack_val_fit$residuals))/length(ADF_jack_val_fit$residuals)),
+                         RMSE=RMSD(meta(val_jack)$ADF,ADF_jack_val_pred),
                          max.val=max(meta(val_jack)$ADF,na.rm=T),
                          min.val=min(meta(val_jack)$ADF,na.rm=T),
                          bias=mean(ADF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$ADF,na.rm=T))
@@ -224,7 +226,7 @@ for(i in 1:nreps){
   perC_jack_val_pred<-as.vector(predict(perC_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_intact)[,,1])
   perC_jack_val_fit<-lm(perC_jack_val_pred~meta(val_jack)$perC)
   perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
-                          RMSE=sqrt(c(crossprod(perC_jack_val_fit$residuals))/length(perC_jack_val_fit$residuals)),
+                          RMSE=RMSD(meta(val_jack)$perC,perC_jack_val_pred),
                           max.val=max(meta(val_jack)$perC,na.rm=T),
                           min.val=min(meta(val_jack)$perC,na.rm=T),
                           bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
@@ -232,7 +234,7 @@ for(i in 1:nreps){
   perN_jack_val_pred<-as.vector(predict(perN_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_intact)[,,1])
   perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
   perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
-                          RMSE=sqrt(c(crossprod(perN_jack_val_fit$residuals))/length(perN_jack_val_fit$residuals)),
+                          RMSE=RMSD(meta(val_jack)$perN,perN_jack_val_pred),
                           max.val=max(meta(val_jack)$perN,na.rm=T),
                           min.val=min(meta(val_jack)$perN,na.rm=T),
                           bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
@@ -240,7 +242,7 @@ for(i in 1:nreps){
   perC_area_jack_val_pred<-as.vector(predict(perC_area_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_area_intact)[,,1])
   perC_area_jack_val_fit<-lm(perC_area_jack_val_pred~meta(val_jack)$perC_area)
   perC_area_jack_stats[[i]]<-c(R2=summary(perC_area_jack_val_fit)$r.squared,
-                          RMSE=sqrt(c(crossprod(perC_area_jack_val_fit$residuals))/length(perC_area_jack_val_fit$residuals)),
+                               RMSE=RMSD(meta(val_jack)$perC_area,perC_area_jack_val_pred),
                           max.val=max(meta(val_jack)$perC_area,na.rm=T),
                           min.val=min(meta(val_jack)$perC_area,na.rm=T),
                           bias=mean(perC_area_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC_area,na.rm=T))
@@ -248,7 +250,7 @@ for(i in 1:nreps){
   perN_area_jack_val_pred<-as.vector(predict(perN_area_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_area_intact)[,,1])
   perN_area_jack_val_fit<-lm(perN_area_jack_val_pred~meta(val_jack)$perN_area)
   perN_area_jack_stats[[i]]<-c(R2=summary(perN_area_jack_val_fit)$r.squared,
-                          RMSE=sqrt(c(crossprod(perN_area_jack_val_fit$residuals))/length(perN_area_jack_val_fit$residuals)),
+                               RMSE=RMSD(meta(val_jack)$perN_area,perN_area_jack_val_pred),
                           max.val=max(meta(val_jack)$perN_area,na.rm=T),
                           min.val=min(meta(val_jack)$perN_area,na.rm=T),
                           bias=mean(perN_area_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN_area,na.rm=T))
@@ -256,7 +258,7 @@ for(i in 1:nreps){
   LMA_jack_val_pred<-as.vector(predict(LMA_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_intact)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
   LMA_jack_stats[[i]]<-c(R2=summary(LMA_jack_val_fit)$r.squared,
-                         RMSE=sqrt(c(crossprod(LMA_jack_val_fit$residuals))/length(LMA_jack_val_fit$residuals)),
+                         RMSE=RMSD(meta(val_jack)$LMA,LMA_jack_val_pred),
                          max.val=max(meta(val_jack)$LMA,na.rm=T),
                          min.val=min(meta(val_jack)$LMA,na.rm=T),
                          bias=mean(LMA_jack_val_pred,na.rm=T)-mean(meta(val_jack)$LMA,na.rm=T))
