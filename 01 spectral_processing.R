@@ -117,6 +117,22 @@ meta(ground_spec_agg)$perC_area<-with(meta(ground_spec_agg),perC*LMA)
 meta(ground_spec_agg)$perN_area<-with(meta(ground_spec_agg),perN*LMA)
 
 ####################################
+## divide training and testing
+
+train_sample <- createDataPartition(
+  y = meta(ground_spec_agg)$sp,
+  p = .8,
+  list = FALSE
+)
+test_sample<-setdiff(1:nrow(reflectance(ground_spec_agg)),train_sample)
+
+ground_spec_agg_train<-ground_spec_agg[train_sample,]
+ground_spec_agg_test<-ground_spec_agg[test_sample,]
+
+intact_spec_agg_train<-intact_spec_agg[train_sample,]
+intact_spec_agg_test<-intact_spec_agg[test_sample,]
+
+####################################
 ## plot spectra
 
 intact_quantiles<-quantile(intact_spec_agg,probs=c(0,0.025,0.5,0.975,1))

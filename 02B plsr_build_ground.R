@@ -9,22 +9,6 @@ library(rdist)
 library(reshape2)
 
 ############################################
-## calibration and validation data
-
-train_sample <- createDataPartition(
-  y = meta(ground_spec_agg)$sp,
-  p = .8,
-  list = FALSE
-)
-test_sample<-setdiff(1:nrow(reflectance(ground_spec_agg)),train_sample)
-
-ground_spec_agg_train<-ground_spec_agg[train_sample,]
-ground_spec_agg_test<-ground_spec_agg[test_sample,]
-
-ground_train_names<-names(ground_spec_agg_train)
-write.csv(ground_train_names,"Senesced_JCB/ground_train_names.csv")
-
-############################################
 ## build initial PLSR models for calibration data
 
 NDF_ground<-plsr(meta(ground_spec_agg_train)$NDF~reflectance(ground_spec_agg_train),

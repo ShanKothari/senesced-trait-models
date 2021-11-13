@@ -9,21 +9,6 @@ library(rdist)
 library(reshape2)
 
 #########################################################
-## calibration and validation data
-
-# train_sample <- createDataPartition(
-#   y = meta(intact_spec_agg)$sp,
-#   p = .8,
-#   list = FALSE
-# )
-# test_sample<-setdiff(1:nrow(reflectance(intact_spec_agg)),train_sample)
-
-ground_train_names<-read.csv("SenescencePaper/ground_train_names.csv")
-
-intact_spec_agg_train<-intact_spec_agg[which(names(intact_spec_agg) %in% ground_train_names$x)]
-intact_spec_agg_test<-intact_spec_agg[test_sample,]
-
-#########################################################
 ## train models
 
 NDF_intact<-plsr(meta(intact_spec_agg)$NDF~reflectance(intact_spec_agg),
