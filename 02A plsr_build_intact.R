@@ -156,11 +156,11 @@ ggplot(perN_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
 ## VIP plots
 
 source("SenescencePaper/VIP.R")
-VIP_intact<-data.frame(NDF=VIP(NDF_intactd)[ncomp_NDF_intactd,],
-                       ADF=VIP(ADF_intactd)[ncomp_ADF_intactd,],
-                       perC=VIP(perC_intactd)[ncomp_perC_intactd,],
-                       perN=VIP(perN_intactd)[ncomp_perN_intactd,],
-                       LMA=VIP(LMA_intactd)[ncomp_LMA_intactd,],
+VIP_intact<-data.frame(NDF=VIP(NDF_intact)[ncomp_NDF_intact,],
+                       ADF=VIP(ADF_intact)[ncomp_ADF_intact,],
+                       perC=VIP(perC_intact)[ncomp_perC_intact,],
+                       perN=VIP(perN_intact)[ncomp_perN_intact,],
+                       LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
                        wavelength=400:2400)
 
 #######################################
