@@ -1,5 +1,6 @@
 setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 library(spectrolab)
+library(patchwork)
 library(pls)
 library(ggplot2)
 library(reshape2)
@@ -265,7 +266,7 @@ for(i in 1:nreps){
   
 }
 
-NDF_jack_pred<-apply.coefs(NDF_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+NDF_jack_pred<-apply.coefs(NDF_jack_coefs,as.matrix(intact_spec_agg_test))
 NDF_jack_stat<-t(apply(NDF_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         pred_low=NDF_jack_stat[,2],
@@ -275,7 +276,7 @@ NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
-ADF_jack_pred<-apply.coefs(ADF_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+ADF_jack_pred<-apply.coefs(ADF_jack_coefs,as.matrix(intact_spec_agg_test))
 ADF_jack_stat<-t(apply(ADF_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         pred_low=ADF_jack_stat[,2],
@@ -285,7 +286,7 @@ ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
-perC_jack_pred<-apply.coefs(perC_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+perC_jack_pred<-apply.coefs(perC_jack_coefs,as.matrix(intact_spec_agg_test))
 perC_jack_stat<-t(apply(perC_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          pred_low=perC_jack_stat[,2],
@@ -295,7 +296,7 @@ perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perN_jack_pred<-apply.coefs(perN_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+perN_jack_pred<-apply.coefs(perN_jack_coefs,as.matrix(intact_spec_agg_test))
 perN_jack_stat<-t(apply(perN_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                          pred_low=perN_jack_stat[,2],
@@ -305,7 +306,7 @@ perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perC_area_jack_pred<-apply.coefs(perC_area_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+perC_area_jack_pred<-apply.coefs(perC_area_jack_coefs,as.matrix(intact_spec_agg_test))
 perC_area_jack_stat<-t(apply(perC_area_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perC_area_jack_df<-data.frame(pred_mean=perC_area_jack_stat[,1],
                          pred_low=perC_area_jack_stat[,2],
@@ -315,7 +316,7 @@ perC_area_jack_df<-data.frame(pred_mean=perC_area_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perN_area_jack_pred<-apply.coefs(perN_area_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+perN_area_jack_pred<-apply.coefs(perN_area_jack_coefs,as.matrix(intact_spec_agg_test))
 perN_area_jack_stat<-t(apply(perN_area_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perN_area_jack_df<-data.frame(pred_mean=perN_area_jack_stat[,1],
                          pred_low=perN_area_jack_stat[,2],
@@ -325,7 +326,7 @@ perN_area_jack_df<-data.frame(pred_mean=perN_area_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-LMA_jack_pred<-apply.coefs(LMA_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
+LMA_jack_pred<-apply.coefs(LMA_jack_coefs,as.matrix(intact_spec_agg_test))
 LMA_jack_stat<-t(apply(LMA_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
                         pred_low=LMA_jack_stat[,2],
@@ -377,16 +378,20 @@ intact_val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
   labs(y="R2",x="Trait")+
   ggtitle("Intact-leaf spectra")
 
-perRMSE.df<-data.frame(NDF=unlist(lapply(NDF_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                       ADF=unlist(lapply(ADF_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                       perC=unlist(lapply(perC_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                       perN=unlist(lapply(perN_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                       perC_area=unlist(lapply(perC_area_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                       perN_area=unlist(lapply(perN_area_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                       LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))))
+perRMSE.df<-data.frame(NDF=unlist(lapply(NDF_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       ADF=unlist(lapply(ADF_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       perC=unlist(lapply(perC_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       perN=unlist(lapply(perN_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       perC_area=unlist(lapply(perC_area_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       perN_area=unlist(lapply(perN_area_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["perRMSE"]])))
 
 perRMSE.long<-melt(perRMSE.df)
 intact_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   geom_violin()+theme_bw()+
   theme(text = element_text(size=20))+
   labs(y="%RMSE",x="Trait")
+
+pdf("Manuscript/FigS1.pdf",height=8,width=8)
+(intact_val_R2/intact_val_perRMSE)
+dev.off()

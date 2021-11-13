@@ -3,6 +3,9 @@ library(ggplot2)
 library(patchwork)
 
 ###################################
+## VIP plotting
+
+###################################
 ## read in data
 
 intact_jack_coef_list<-readRDS("SavedResults/intact_jack_coefs_list.rds")
@@ -186,3 +189,23 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
   labs(y=expression("Measured LMA (g/m"^2*")"),
        x=expression("Predicted LMA (g/m"^2*")"))+
   guides(color=F)
+
+################################
+## arrange plots
+
+pdf("Fig2.pdf",height=12,width=8)
+(perC_intact_val_plot/perN_intact_val_plot/LMA_intact_val_plot)|
+  (perC_ground_val_plot/perN_ground_val_plot/LMA_ground_val_plot) +
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()
+
+pdf("Fig3.pdf",height=8,width=8)
+(NDF_intact_val_plot/ADF_intact_val_plot)|
+  (NDF_ground_val_plot/ADF_ground_val_plot) +
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()
+
+pdf("Fig4.pdf",height=8,width=4)
+(perC_area_intact_val_plot/perN_area_intact_val_plot) +
+  plot_layout(guides="collect") & theme(legend.position = "bottom")
+dev.off()

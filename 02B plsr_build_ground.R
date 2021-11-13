@@ -215,7 +215,7 @@ for(i in 1:nreps){
   
 }
 
-NDF_jack_pred<-apply.coefs(NDF_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
+NDF_jack_pred<-apply.coefs(NDF_jack_coefs,as.matrix(ground_spec_agg_test))
 NDF_jack_stat<-t(apply(NDF_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         pred_low=NDF_jack_stat[,2],
@@ -225,7 +225,7 @@ NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
-ADF_jack_pred<-apply.coefs(ADF_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
+ADF_jack_pred<-apply.coefs(ADF_jack_coefs,as.matrix(ground_spec_agg_test))
 ADF_jack_stat<-t(apply(ADF_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         pred_low=ADF_jack_stat[,2],
@@ -235,7 +235,7 @@ ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
-perC_jack_pred<-apply.coefs(perC_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
+perC_jack_pred<-apply.coefs(perC_jack_coefs,as.matrix(ground_spec_agg_test))
 perC_jack_stat<-t(apply(perC_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          pred_low=perC_jack_stat[,2],
@@ -245,7 +245,7 @@ perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          Species=meta(ground_spec_agg_test)$sp,
                          ID=meta(ground_spec_agg_test)$ID)
 
-perN_jack_pred<-apply.coefs(perN_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
+perN_jack_pred<-apply.coefs(perN_jack_coefs,as.matrix(ground_spec_agg_test))
 perN_jack_stat<-t(apply(perN_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                         pred_low=perN_jack_stat[,2],
@@ -255,7 +255,7 @@ perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
-LMA_jack_pred<-apply.coefs(LMA_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
+LMA_jack_pred<-apply.coefs(LMA_jack_coefs,as.matrix(ground_spec_agg_test))
 LMA_jack_stat<-t(apply(LMA_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
                         pred_low=LMA_jack_stat[,2],
