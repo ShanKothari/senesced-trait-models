@@ -235,11 +235,7 @@ for(i in 1:nreps){
   
 }
 
-NDF_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
-  preds<-lapply(NDF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+NDF_jack_pred<-apply.coefs(NDF_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
 NDF_jack_stat<-t(apply(NDF_jack_pred,1,function(obs) c(mean(obs),sd(obs))))
 NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         pred_low=NDF_jack_stat[,1]-1.96*NDF_jack_stat[,2],
@@ -262,11 +258,7 @@ NDF_ground_val_plot<-ggplot(NDF_jack_df,aes(y=Measured*100,x=pred_mean*100,color
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle("Predicting NDF from ground-leaf spectra")+guides(color=F)
 
-ADF_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
-  preds<-lapply(ADF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+ADF_jack_pred<-apply.coefs(ADF_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
 ADF_jack_stat<-t(apply(ADF_jack_pred,1,function(obs) c(mean(obs),sd(obs))))
 ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         pred_low=ADF_jack_stat[,1]-1.96*ADF_jack_stat[,2],
@@ -289,11 +281,7 @@ ADF_ground_val_plot<-ggplot(ADF_jack_df,aes(y=Measured*100,x=pred_mean*100,color
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle("Predicting ADF from ground-leaf spectra")+guides(color=F)
 
-perC_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
-  preds<-lapply(perC_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+perC_jack_pred<-apply.coefs(perC_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
 perC_jack_stat<-t(apply(perC_jack_pred,1,function(obs) c(mean(obs),sd(obs))))
 perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          pred_low=perC_jack_stat[,1]-1.96*perC_jack_stat[,2],
@@ -316,11 +304,7 @@ perC_ground_val_plot<-ggplot(perC_jack_df,aes(y=Measured*100,x=pred_mean*100,col
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle(expression("Predicting C"[mass]*" from ground-leaf spectra"))+guides(color=F)
 
-perN_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
-  preds<-lapply(perN_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+perN_jack_pred<-apply.coefs(perN_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
 perN_jack_stat<-t(apply(perN_jack_pred,1,function(obs) c(mean(obs),sd(obs))))
 perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                         pred_low=perN_jack_stat[,1]-1.96*perN_jack_stat[,2],
@@ -343,11 +327,7 @@ perN_ground_val_plot<-ggplot(perN_jack_df,aes(y=Measured*100,x=pred_mean*100,col
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle(expression("Predicting N"[mass]*" from ground-leaf spectra"))+guides(color=F)
 
-LMA_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
-  preds<-lapply(LMA_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
-
+LMA_jack_pred<-apply.coefs(LMA_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
 LMA_jack_stat<-t(apply(LMA_jack_pred,1,function(obs) c(mean(obs),sd(obs))))
 LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
                          pred_low=LMA_jack_stat[,1]-1.96*LMA_jack_stat[,2],
