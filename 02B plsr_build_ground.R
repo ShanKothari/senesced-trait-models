@@ -133,7 +133,7 @@ VIP_ground<-data.frame(NDF=VIP(NDF_ground)[ncomp_NDF_ground,],
                        perN=VIP(perN_ground)[ncomp_perN_ground,],
                        LMA=VIP(LMA_ground)[ncomp_LMA_ground,],
                        wavelength=400:2400)
-saveRDS(VIP_ground,"VIP_ground.rds")
+saveRDS(VIP_ground,"SavedResults/VIP_ground.rds")
 
 #######################################
 ## jackknife tests + prediction of validation data

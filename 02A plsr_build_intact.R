@@ -153,14 +153,14 @@ ggplot(perN_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
 ##########################################
 ## VIP plots
 
-source("SenescencePaper/VIP.R")
+source("VIP.R")
 VIP_intact<-data.frame(NDF=VIP(NDF_intact)[ncomp_NDF_intact,],
                        ADF=VIP(ADF_intact)[ncomp_ADF_intact,],
                        perC=VIP(perC_intact)[ncomp_perC_intact,],
                        perN=VIP(perN_intact)[ncomp_perN_intact,],
                        LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
                        wavelength=400:2400)
-saveRDS(VIP_intact,"VIP_intact.rds")
+saveRDS(VIP_intact,"SavedResults/VIP_intact.rds")
 
 #######################################
 ## jackknife tests + prediction of validation data
