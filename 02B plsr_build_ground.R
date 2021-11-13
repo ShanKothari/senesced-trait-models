@@ -224,6 +224,7 @@ NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         pred_low=NDF_jack_stat[,2],
                         pred_high=NDF_jack_stat[,3],
                         Measured=meta(ground_spec_agg_test)$NDF,
+                        ncomp=ncomp_NDF_ground,
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
@@ -247,6 +248,7 @@ ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         pred_low=ADF_jack_stat[,2],
                         pred_high=ADF_jack_stat[,3],
                         Measured=meta(ground_spec_agg_test)$ADF,
+                        ncomp=ncomp_ADF_ground,
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
@@ -270,6 +272,7 @@ perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          pred_low=perC_jack_stat[,2],
                          pred_high=perC_jack_stat[,3],
                          Measured=meta(ground_spec_agg_test)$perC,
+                         ncomp=ncomp_perC_ground,
                          Species=meta(ground_spec_agg_test)$sp,
                          ID=meta(ground_spec_agg_test)$ID)
 
@@ -294,6 +297,7 @@ perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                         pred_low=perN_jack_stat[,2],
                         pred_high=perN_jack_stat[,3],
                         Measured=meta(ground_spec_agg_test)$perN,
+                        ncomp=ncomp_perN_ground,
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
@@ -315,11 +319,12 @@ perN_ground_val_plot<-ggplot(perN_jack_df,aes(y=Measured*100,x=pred_mean*100,col
 LMA_jack_pred<-apply.coefs(LMA_jack_coefs_pressed,as.matrix(ground_spec_agg_test))
 LMA_jack_stat<-t(apply(LMA_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
-                         pred_low=LMA_jack_stat[,2],
-                         pred_high=LMA_jack_stat[,3],
-                         Measured=meta(ground_spec_agg_test)$LMA,
-                         Species=meta(ground_spec_agg_test)$sp,
-                         ID=meta(ground_spec_agg_test)$ID)
+                        pred_low=LMA_jack_stat[,2],
+                        pred_high=LMA_jack_stat[,3],
+                        Measured=meta(ground_spec_agg_test)$LMA,
+                        ncomp=ncomp_LMA_ground,
+                        Species=meta(ground_spec_agg_test)$sp,
+                        ID=meta(ground_spec_agg_test)$ID)
 
 LMA_ground_val_plot<-ggplot(LMA_jack_df,
                             aes(y=Measured*10000,x=pred_mean*10000,color=Species))+

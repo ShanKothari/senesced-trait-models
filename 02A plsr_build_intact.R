@@ -274,6 +274,7 @@ NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         pred_low=NDF_jack_stat[,2],
                         pred_high=NDF_jack_stat[3],
                         Measured=meta(intact_spec_agg_test)$NDF,
+                        ncomp=ncomp_NDF_intact,
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
@@ -295,6 +296,7 @@ ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         pred_low=ADF_jack_stat[,2],
                         pred_high=ADF_jack_stat[,3],
                         Measured=meta(intact_spec_agg_test)$ADF,
+                        ncomp=ncomp_ADF_intact,
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
@@ -316,6 +318,7 @@ perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          pred_low=perC_jack_stat[,2],
                          pred_high=perC_jack_stat[,3],
                          Measured=meta(intact_spec_agg_test)$perC,
+                         ncomp=ncomp_perC_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
@@ -338,6 +341,7 @@ perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                          pred_low=perN_jack_stat[,2],
                          pred_high=perN_jack_stat[,3],
                          Measured=meta(intact_spec_agg_test)$perN,
+                         ncomp=ncomp_perN_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
@@ -360,6 +364,7 @@ perC_area_jack_df<-data.frame(pred_mean=perC_area_jack_stat[,1],
                          pred_low=perC_area_jack_stat[,2],
                          pred_high=perC_area_jack_stat[,3],
                          Measured=meta(intact_spec_agg_test)$perC_area,
+                         ncomp=ncomp_perC_area_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
@@ -382,6 +387,7 @@ perN_area_jack_df<-data.frame(pred_mean=perN_area_jack_stat[,1],
                          pred_low=perN_area_jack_stat[,2],
                          pred_high=perN_area_jack_stat[,3],
                          Measured=meta(intact_spec_agg_test)$perN_area,
+                         ncomp=ncomp_perN_area_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
@@ -405,6 +411,7 @@ LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
                         pred_low=LMA_jack_stat[,2],
                         pred_high=LMA_jack_stat[,3],
                         Measured=meta(intact_spec_agg_test)$LMA,
+                        ncomp=ncomp_LMA_intact,
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
