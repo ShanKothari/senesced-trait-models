@@ -138,6 +138,12 @@ ground_spec_agg_test<-ground_spec_agg[test_sample,]
 intact_spec_agg_train<-intact_spec_agg[train_sample,]
 intact_spec_agg_test<-intact_spec_agg[test_sample,]
 
+saveRDS(intact_spec_agg_train,"SavedResults/intact_spec_agg_train.rds")
+saveRDS(intact_spec_agg_test,"SavedResults/intact_spec_agg_test.rds")
+
+saveRDS(ground_spec_agg_train,"SavedResults/ground_spec_agg_train.rds")
+saveRDS(ground_spec_agg_test,"SavedResults/ground_spec_agg_test.rds")
+
 ####################################
 ## plot spectra
 

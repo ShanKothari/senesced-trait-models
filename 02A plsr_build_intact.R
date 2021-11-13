@@ -7,7 +7,13 @@ library(vegan)
 library(rdist)
 library(reshape2)
 
-#########################################################
+#########################################
+## read data
+
+intact_spec_agg_train<-readRDS("SavedResults/intact_spec_agg_train.rds")
+intact_spec_agg_test<-readRDS("SavedResults/intact_spec_agg_test.rds")
+
+#########################################
 ## train models
 
 NDF_intact<-plsr(meta(intact_spec_agg_train)$NDF~as.matrix(intact_spec_agg),

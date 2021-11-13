@@ -7,6 +7,12 @@ library(vegan)
 library(rdist)
 library(reshape2)
 
+#########################################
+## read data
+
+ground_spec_agg_train<-readRDS("SavedResults/ground_spec_agg_train.rds")
+ground_spec_agg_test<-readRDS("SavedResults/ground_spec_agg_test.rds")
+
 ############################################
 ## build initial PLSR models for calibration data
 
