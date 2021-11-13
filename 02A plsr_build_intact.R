@@ -18,27 +18,27 @@ source("Scripts/senesced-trait-models/useful_functions.R")
 #########################################
 ## train models
 
-NDF_intact<-plsr(meta(intact_spec_agg_train)$NDF~as.matrix(intact_spec_agg),
+NDF_intact<-plsr(meta(intact_spec_agg_train)$NDF~as.matrix(intact_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-ADF_intact<-plsr(meta(intact_spec_agg_train)$ADF~as.matrix(intact_spec_agg),
+ADF_intact<-plsr(meta(intact_spec_agg_train)$ADF~as.matrix(intact_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perN_intact<-plsr(meta(intact_spec_agg_train)$perN~as.matrix(intact_spec_agg),
+perN_intact<-plsr(meta(intact_spec_agg_train)$perN~as.matrix(intact_spec_agg_train),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perC_intact<-plsr(meta(intact_spec_agg_train)$perC~as.matrix(intact_spec_agg),
+perC_intact<-plsr(meta(intact_spec_agg_train)$perC~as.matrix(intact_spec_agg_train),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
-LMA_intact<-plsr(meta(intact_spec_agg_train)$LMA~as.matrix(intact_spec_agg),
+LMA_intact<-plsr(meta(intact_spec_agg_train)$LMA~as.matrix(intact_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perN_area_intact<-plsr(meta(intact_spec_agg_train)$perN_area~as.matrix(intact_spec_agg),
+perN_area_intact<-plsr(meta(intact_spec_agg_train)$perN_area~as.matrix(intact_spec_agg_train),
                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perC_area_intact<-plsr(meta(intact_spec_agg_train)$perC_area~as.matrix(intact_spec_agg),
+perC_area_intact<-plsr(meta(intact_spec_agg_train)$perC_area~as.matrix(intact_spec_agg_train),
                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
 
 ncomp_NDF_intact <- selectNcomp(NDF_intact, method = "onesigma", plot = FALSE)
-NDF_intact_valid <- which(!is.na(meta(intact_spec_agg)$NDF))
-NDF_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[NDF_intact_valid],
-                            Species=meta(intact_spec_agg)$sp[NDF_intact_valid],
-                            Run=meta(intact_spec_agg)$FiberRun[NDF_intact_valid],
-                            Measured=meta(intact_spec_agg)$NDF[NDF_intact_valid],
+NDF_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$NDF))
+NDF_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[NDF_intact_valid],
+                            Species=meta(intact_spec_agg_train)$sp[NDF_intact_valid],
+                            Run=meta(intact_spec_agg_train)$FiberRun[NDF_intact_valid],
+                            Measured=meta(intact_spec_agg_train)$NDF[NDF_intact_valid],
                             val_pred=NDF_intact$validation$pred[,,ncomp_NDF_intact])
 ggplot(NDF_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -51,11 +51,11 @@ ggplot(NDF_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   ggtitle("Predicting %NDF from intact-leaf spectra")+guides(color=F)
 
 ncomp_ADF_intact <- selectNcomp(ADF_intact, method = "onesigma", plot = FALSE)
-ADF_intact_valid <- which(!is.na(meta(intact_spec_agg)$ADF))
-ADF_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[ADF_intact_valid],
-                            Species=meta(intact_spec_agg)$sp[ADF_intact_valid],
-                            Run=meta(intact_spec_agg)$FiberRun[ADF_intact_valid],
-                            Measured=meta(intact_spec_agg)$ADF[ADF_intact_valid],
+ADF_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$ADF))
+ADF_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[ADF_intact_valid],
+                            Species=meta(intact_spec_agg_train)$sp[ADF_intact_valid],
+                            Run=meta(intact_spec_agg_train)$FiberRun[ADF_intact_valid],
+                            Measured=meta(intact_spec_agg_train)$ADF[ADF_intact_valid],
                             val_pred=ADF_intact$validation$pred[,,ncomp_ADF_intact])
 ggplot(ADF_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -68,11 +68,11 @@ ggplot(ADF_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   ggtitle("Predicting %ADF from intact-leaf spectra")+guides(color=F)
 
 ncomp_perC_intact <- selectNcomp(perC_intact, method = "onesigma", plot = FALSE)
-perC_intact_valid <- which(!is.na(meta(intact_spec_agg)$perC))
-perC_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[perC_intact_valid],
-                             Species=meta(intact_spec_agg)$sp[perC_intact_valid],
-                             Run=meta(intact_spec_agg)$FiberRun[perC_intact_valid],
-                             Measured=meta(intact_spec_agg)$perC[perC_intact_valid],
+perC_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perC))
+perC_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perC_intact_valid],
+                             Species=meta(intact_spec_agg_train)$sp[perC_intact_valid],
+                             Run=meta(intact_spec_agg_train)$FiberRun[perC_intact_valid],
+                             Measured=meta(intact_spec_agg_train)$perC[perC_intact_valid],
                              val_pred=perC_intact$validation$pred[,,ncomp_perC_intact])
 ggplot(perC_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -85,11 +85,11 @@ ggplot(perC_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   ggtitle("Predicting %C from intact-leaf spectra")
 
 ncomp_perN_intact <- selectNcomp(perN_intact, method = "onesigma", plot = FALSE)
-perN_intact_valid <- which(!is.na(meta(intact_spec_agg)$perN))
-perN_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[perN_intact_valid],
-                             Species=meta(intact_spec_agg)$sp[perN_intact_valid],
-                             Run=meta(intact_spec_agg)$FiberRun[perN_intact_valid],
-                             Measured=meta(intact_spec_agg)$perN[perN_intact_valid],
+perN_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perN))
+perN_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perN_intact_valid],
+                             Species=meta(intact_spec_agg_train)$sp[perN_intact_valid],
+                             Run=meta(intact_spec_agg_train)$FiberRun[perN_intact_valid],
+                             Measured=meta(intact_spec_agg_train)$perN[perN_intact_valid],
                              val_pred=perN_intact$validation$pred[,,ncomp_perN_intact])
 ggplot(perN_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -102,11 +102,11 @@ ggplot(perN_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
   ggtitle("Predicting %N from intact-leaf spectra")
 
 ncomp_LMA_intact <- selectNcomp(LMA_intact, method = "onesigma", plot = FALSE)
-LMA_intact_valid <- which(!is.na(meta(intact_spec_agg)$LMA))
-LMA_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[LMA_intact_valid],
-                            Species=meta(intact_spec_agg)$sp[LMA_intact_valid],
-                            Run=meta(intact_spec_agg)$FiberRun[LMA_intact_valid],
-                            Measured=meta(intact_spec_agg)$LMA[LMA_intact_valid],
+LMA_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$LMA))
+LMA_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[LMA_intact_valid],
+                            Species=meta(intact_spec_agg_train)$sp[LMA_intact_valid],
+                            Run=meta(intact_spec_agg_train)$FiberRun[LMA_intact_valid],
+                            Measured=meta(intact_spec_agg_train)$LMA[LMA_intact_valid],
                             val_pred=LMA_intact$validation$pred[,,ncomp_LMA_intact])
 ggplot(LMA_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -119,11 +119,11 @@ ggplot(LMA_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   ggtitle("Predicting LMA from intact-leaf spectra")+guides(color=F)
 
 ncomp_perC_area_intact <- selectNcomp(perC_area_intact, method = "onesigma", plot = FALSE)
-perC_area_intact_valid <- which(!is.na(meta(intact_spec_agg)$perC_area))
-perC_area_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[perC_area_intact_valid],
-                                  Species=meta(intact_spec_agg)$sp[perC_area_intact_valid],
-                                  Run=meta(intact_spec_agg)$FiberRun[perC_area_intact_valid],
-                                  Measured=meta(intact_spec_agg)$perC_area[perC_area_intact_valid],
+perC_area_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perC_area))
+perC_area_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perC_area_intact_valid],
+                                  Species=meta(intact_spec_agg_train)$sp[perC_area_intact_valid],
+                                  Run=meta(intact_spec_agg_train)$FiberRun[perC_area_intact_valid],
+                                  Measured=meta(intact_spec_agg_train)$perC_area[perC_area_intact_valid],
                                   val_pred=perC_area_intact$validation$pred[,,ncomp_perC_area_intact])
 ggplot(perC_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -136,11 +136,11 @@ ggplot(perC_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   ggtitle("Predicting C per area from intact-leaf spectra")
 
 ncomp_perN_area_intact <- selectNcomp(perN_area_intact, method = "onesigma", plot = FALSE)
-perN_area_intact_valid <- which(!is.na(meta(intact_spec_agg)$perN_area))
-perN_area_intact_pred<-data.frame(ID=meta(intact_spec_agg)$ID[perN_area_intact_valid],
-                                  Species=meta(intact_spec_agg)$sp[perN_area_intact_valid],
-                                  Run=meta(intact_spec_agg)$FiberRun[perN_area_intact_valid],
-                                  Measured=meta(intact_spec_agg)$perN_area[perN_area_intact_valid],
+perN_area_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perN_area))
+perN_area_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perN_area_intact_valid],
+                                  Species=meta(intact_spec_agg_train)$sp[perN_area_intact_valid],
+                                  Run=meta(intact_spec_agg_train)$FiberRun[perN_area_intact_valid],
+                                  Measured=meta(intact_spec_agg_train)$perN_area[perN_area_intact_valid],
                                   val_pred=perN_area_intact$validation$pred[,,ncomp_perN_area_intact])
 ggplot(perN_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
@@ -156,11 +156,12 @@ ggplot(perN_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
 ## VIP plots
 
 source("SenescencePaper/VIP.R")
-VIP.NDF<-VIP(NDF_intact)[ncomp_NDF_intact,]
-VIP.ADF<-VIP(ADF_intact)[ncomp_ADF_intact,]
-VIP.perC<-VIP(perC_intact)[ncomp_perC_intact,]
-VIP.perN<-VIP(perN_intact)[ncomp_perN_intact,]
-VIP.LMA<-VIP(LMA_intact)[ncomp_LMA_intact,]
+VIP_intact<-data.frame(NDF=VIP(NDF_intactd)[ncomp_NDF_intactd,],
+                       ADF=VIP(ADF_intactd)[ncomp_ADF_intactd,],
+                       perC=VIP(perC_intactd)[ncomp_perC_intactd,],
+                       perN=VIP(perN_intactd)[ncomp_perN_intactd,],
+                       LMA=VIP(LMA_intactd)[ncomp_LMA_intactd,],
+                       wavelength=400:2400)
 
 #######################################
 ## jackknife tests + prediction of validation data

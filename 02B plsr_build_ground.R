@@ -130,30 +130,12 @@ ggplot(LMA_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
 
 source("Senesced_JCB/VIP.R")
 
-VIP_fiber<-data.frame(NDF=VIP(NDF_ground)[ncomp_NDF_ground,],
-                      ADF=VIP(ADF_ground)[ncomp_ADF_ground,],
-                      wavelength=400:2500)
-
-VIP_elements<-data.frame(perC=VIP(perC_ground)[ncomp_perC_ground,],
-                         perN=VIP(perN_ground)[ncomp_perN_ground,],
-                         LMA=VIP(LMA_ground)[ncomp_LMA_ground,],
-                         wavelength=400:2500)
-
-VIP_fiber_long<-melt(VIP_fiber,id.vars = "wavelength")
-VIP_elements_long<-melt(VIP_elements,id.vars = "wavelength")
-
-VIP_fiber_plot<-ggplot(VIP_fiber_long,aes(x=wavelength,y=value,linetype=variable))+
-  geom_line()+theme_bw()+
-  theme(text=element_text(size=20),
-        axis.title.x = element_blank(),
-        axis.text.x = element_blank())+
-  labs(y="PLSR VIP",x="Wavelength")+
-  ggtitle("Variable Importance of Prediction: Ground")
-
-VIP_element_plot<-ggplot(VIP_elements_long,aes(x=wavelength,y=value,linetype=variable))+
-  geom_line()+theme_bw()+
-  theme(text=element_text(size=20))+
-  labs(y="PLSR VIP",x="Wavelength")
+VIP_ground<-data.frame(NDF=VIP(NDF_ground)[ncomp_NDF_ground,],
+                       ADF=VIP(ADF_ground)[ncomp_ADF_ground,],
+                       perC=VIP(perC_ground)[ncomp_perC_ground,],
+                       perN=VIP(perN_ground)[ncomp_perN_ground,],
+                       LMA=VIP(LMA_ground)[ncomp_LMA_ground,],
+                       wavelength=400:2400)
 
 #######################################
 ## jackknife tests + prediction of validation data
