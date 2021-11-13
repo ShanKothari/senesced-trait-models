@@ -1,10 +1,7 @@
-## PLSR of fiber data
 setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 library(spectrolab)
 library(pls)
 library(ggplot2)
-library(vegan)
-library(rdist)
 library(reshape2)
 
 #########################################

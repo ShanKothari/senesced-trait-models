@@ -1,6 +1,8 @@
 library(spectrolab)
 library(caret)
 library(patchwork)
+library(vegan)
+library(rdist)
 setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 
 #######################################
@@ -53,7 +55,8 @@ setdiff(names(intact_spec_agg),names(ground_spec_agg))
 ############################################
 ## calculate mean spectral distance
 
-ground_spec_split<-split(x=data.frame(reflectance(ground_spec)),f=meta(ground_spec)$ID)
+ground_spec_split<-split(x=data.frame(as.matrix(ground_spec)),
+                         f=meta(ground_spec)$ID)
 
 mean_spec_dist<-lapply(ground_spec_split,
                        function(x) mean(rdist(x,metric="angular")))

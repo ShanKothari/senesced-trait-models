@@ -1,10 +1,7 @@
-## PLSR of fiber data
 setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 library(spectrolab)
 library(pls)
 library(ggplot2)
-library(vegan)
-library(rdist)
 library(reshape2)
 
 #########################################
@@ -433,10 +430,10 @@ LMA_intact_val_plot<-ggplot(LMA_jack_df,
 ## save jackknife output
 
 intact_jack_coef_list<-list(LMA=LMA_jack_coefs,
-                             perC=perC_jack_coefs,
-                             perN=perN_jack_coefs,
-                             NDF=NDF_jack_coefs,
-                             ADF=ADF_jack_coefs,
+                            perC=perC_jack_coefs,
+                            perN=perN_jack_coefs,
+                            NDF=NDF_jack_coefs,
+                            ADF=ADF_jack_coefs,
                             perC_area=perC_area_jack_coefs,
                             perN_area=perN_area_jack_coefs)
 saveRDS(intact_jack_coef_list,"SavedResults/intact_jack_coefs_list.rds")
