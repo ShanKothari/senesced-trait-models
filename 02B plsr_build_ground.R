@@ -194,14 +194,14 @@ for(i in 1:nreps){
   perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
                           RMSE=RMSD(meta(val_jack)$perC,perC_jack_val_pred),
                           perRMSE=percentRMSD(meta(val_jack)$perC,perC_jack_val_pred,0.025,0.975),
-                         bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
+                          bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
   
   perN_jack_val_pred<-as.vector(predict(perN_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_ground)[,,1])
   perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
   perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
                           RMSE=RMSD(meta(val_jack)$perN,perN_jack_val_pred),
                           perRMSE=percentRMSD(meta(val_jack)$perN,perN_jack_val_pred,0.025,0.975),
-                         bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
+                          bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
   
   LMA_jack_val_pred<-as.vector(predict(LMA_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_ground)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
@@ -341,6 +341,23 @@ LMA_ground_val_plot<-ggplot(LMA_jack_df,
   labs(y=expression("Measured LMA (g/m"^2*")"),
        x=expression("Predicted LMA (g/m"^2*")"))+
   guides(color=F)
+
+###################################
+## save jackknife output
+
+ground_jack_coef_list<-list(LMA=LMA_jack_coefs,
+                            perC=perC_jack_coefs,
+                            perN=perN_jack_coefs,
+                            NDF=NDF_jack_coefs,
+                            ADF=ADF_jack_coefs)
+saveRDS(ground_jack_coef_list,"SavedResults/ground_jack_coefs_list.rds")
+
+ground_jack_df_list<-list(LMA=LMA_jack_df,
+                          perC=perC_jack_df,
+                          perN=perN_jack_df,
+                          NDF=NDF_jack_df,
+                          ADF=ADF_jack_df)
+saveRDS(ground_jack_df_list,"SavedResults/ground_jack_df_list.rds")
 
 ############################################
 ## violin plots

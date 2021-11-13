@@ -429,6 +429,27 @@ LMA_intact_val_plot<-ggplot(LMA_jack_df,
        x=expression("Predicted LMA (g/m"^2*")"))+
   guides(color=F)
 
+###################################
+## save jackknife output
+
+intact_jack_coef_list<-list(LMA=LMA_jack_coefs,
+                             perC=perC_jack_coefs,
+                             perN=perN_jack_coefs,
+                             NDF=NDF_jack_coefs,
+                             ADF=ADF_jack_coefs,
+                            perC_area=perC_area_jack_coefs,
+                            perN_area=perN_area_jack_coefs)
+saveRDS(intact_jack_coef_list,"SavedResults/intact_jack_coefs_list.rds")
+
+intact_jack_df_list<-list(LMA=LMA_jack_df,
+                          perC=perC_jack_df,
+                          perN=perN_jack_df,
+                          NDF=NDF_jack_df,
+                          ADF=ADF_jack_df,
+                          perC_area=perC_area_jack_df,
+                          perN_area=perN_area_jack_df)
+saveRDS(intact_jack_df_list,"SavedResults/intact_jack_df_list.rds")
+
 ############################################
 ## violin plots
 
