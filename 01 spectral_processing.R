@@ -23,11 +23,10 @@ intact_spec<-intact_spec/100
 intact_spec_matched<-match_sensors(intact_spec, splice_at=c(983), fixed_sensor = 2, interpolate_wvl = 5,
                                    factor_range = c(0.5, 3))
 ## spline smoothing if desired
-# intact_spec_matched<-smooth(intact_spec_matched)
+intact_spec_matched<-smooth(intact_spec_matched)
 
 intact_spec_agg<-aggregate(intact_spec_matched,by=meta(intact_spec_matched)$ID,
                            FUN=try_keep_txt(mean))
-## names(intact_spec_agg)[!(names(intact_spec_agg) %in% names(ground_spec_agg))]
 
 #######################################
 ## read ground spectra
@@ -45,6 +44,10 @@ meta(ground_spec)$ID<-apply(meta(ground_spec),1,function(x) paste(x,collapse = "
 ground_spec_agg<-aggregate(ground_spec,by=meta(ground_spec)$ID,
                            FUN=try_keep_txt(mean))
 
+## compare which samples are in each
+setdiff(names(ground_spec_agg),names(intact_spec_agg))
+setdiff(names(intact_spec_agg),names(ground_spec_agg))
+
 ############################################
 ## calculate mean spectral distance
 
@@ -58,7 +61,7 @@ mean(unlist(mean_spec_dist)*180/pi)
 ## attach trait data
 
 ## read fiber data
-fiber<-read.csv("Senesced_JCB/FiberAnalysis/FiberSummary.csv")
+fiber<-read.csv("FiberAnalysis/FiberSummary.csv")
 fiber<-fiber[-which(fiber$REDO %in% c("YES")),]
 
 meta(intact_spec_agg)$NDF<-fiber$NDF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]/100
@@ -70,7 +73,7 @@ meta(ground_spec_agg)$ADF<-fiber$ADF[match(meta(ground_spec_agg)$ID,fiber$Sample
 meta(ground_spec_agg)$FiberRun<-fiber$Run[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 
 ## elemental data
-EAdata<-read.csv("Senesced_JCB/ElementalAnalysis/SummaryTables/CNSummary_all.csv")
+EAdata<-read.csv("ElementalAnalysis/SummaryTables/CNSummary_all.csv")
 EAdata<-EAdata[-which(EAdata$REDO %in% c("YES")),]
 EAdata<-EAdata[-grep("duplicate",EAdata$SampleID),]
 EAdata<-EAdata[-grep("apple",EAdata$SampleID),]
@@ -84,7 +87,7 @@ meta(ground_spec_agg)$perN<-EAdata$N.percent[match(meta(ground_spec_agg)$ID,EAda
 meta(ground_spec_agg)$EARun<-EAdata$Run[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]
 
 ## LMA data
-LMAdata_broad<-read.csv("Senesced_JCB/SLA/SLA_senesced_broadleaf_2_6_2020.csv")
+LMAdata_broad<-read.csv("SLA/SLA_senesced_broadleaf_2_6_2020.csv")
 LMAdata_broad<-LMAdata_broad[-which(LMAdata_broad$Bad=="YES"),]
 LMAdata_broad$ID<-apply(LMAdata_broad[,c(1,3,2,4)],1,function(x) paste(x,collapse="_"))
 LMAdata_broad$ID<-gsub(pattern = " ",replacement="",x = LMAdata_broad$ID)
@@ -92,7 +95,7 @@ LMAdata_broad$LMA<-with(LMAdata_broad,weight/(size.per.hole.punch..cm.2.*number.
 LMAdata_broad<-LMAdata_broad[,c("Plot","Species","Location","Number","LMA","ID")]
 
 ## calculate area
-LMAdata_needle<-read.csv("Senesced_JCB/SLA/SLA_senesced_needleleaf_3_17_2020.csv")
+LMAdata_needle<-read.csv("SLA/SLA_senesced_needleleaf_3_17_2020.csv")
 LMAdata_needle$area<-LMAdata_needle$LengthMm/10*LMAdata_needle$WidthMm/10
 LMAdata_needle$LengthMm<-NULL
 LMAdata_needle$WidthMm<-NULL
