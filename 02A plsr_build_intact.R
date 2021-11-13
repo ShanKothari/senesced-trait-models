@@ -275,18 +275,6 @@ NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
-NDF_intact_val_plot<-ggplot(NDF_jack_df,aes(y=Measured*100,x=pred_mean*100,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(25,75),ylim=c(25,75))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y="Measured NDF (%)",x="Predicted NDF (%)")+
-  guides(color=F)
-
 ADF_jack_pred<-apply.coefs(ADF_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
 ADF_jack_stat<-t(apply(ADF_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
@@ -296,18 +284,6 @@ ADF_jack_df<-data.frame(pred_mean=ADF_jack_stat[,1],
                         ncomp=ncomp_ADF_intact,
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
-
-ADF_intact_val_plot<-ggplot(ADF_jack_df,aes(y=Measured*100,x=pred_mean*100,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(18,58),ylim=c(18,58))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y="Measured ADF (%)",x="Predicted ADF (%)")+
-  guides(color=F)
 
 perC_jack_pred<-apply.coefs(perC_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
 perC_jack_stat<-t(apply(perC_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
@@ -319,19 +295,6 @@ perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perC_intact_val_plot<-ggplot(perC_jack_df,aes(y=Measured*100,x=pred_mean*100,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(40,63),ylim=c(40,63))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured C"[mass]*" (%)"),
-       x=expression("Predicted C"[mass]*" (%)"))+
-  guides(color=F)
-
 perN_jack_pred<-apply.coefs(perN_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
 perN_jack_stat<-t(apply(perN_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
@@ -341,19 +304,6 @@ perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
                          ncomp=ncomp_perN_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
-
-perN_intact_val_plot<-ggplot(perN_jack_df,aes(y=Measured*100,x=pred_mean*100,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured N"[mass]*" (%)"),
-       x=expression("Predicted N"[mass]*" (%)"))+
-  guides(color=F)
 
 perC_area_jack_pred<-apply.coefs(perC_area_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
 perC_area_jack_stat<-t(apply(perC_area_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
@@ -365,19 +315,6 @@ perC_area_jack_df<-data.frame(pred_mean=perC_area_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perC_area_intact_val_plot<-ggplot(perC_area_jack_df,
-                                  aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,200),ylim=c(0,200))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured C"[area]*" (g/m"^2*")"),
-       x=expression("Predicted C"[area]*" (g/m"^2*")"))
-
 perN_area_jack_pred<-apply.coefs(perN_area_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
 perN_area_jack_stat<-t(apply(perN_area_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 perN_area_jack_df<-data.frame(pred_mean=perN_area_jack_stat[,1],
@@ -388,20 +325,6 @@ perN_area_jack_df<-data.frame(pred_mean=perN_area_jack_stat[,1],
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perN_area_intact_val_plot<-ggplot(perN_area_jack_df,
-                                  aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured N"[area]*" (g/m"^2*")"),
-       x=expression("Predicted N"[area]*" (g/m"^2*")"))+
-  guides(color=F)
-
 LMA_jack_pred<-apply.coefs(LMA_jack_coefs_pressed,as.matrix(intact_spec_agg_test))
 LMA_jack_stat<-t(apply(LMA_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
@@ -411,20 +334,6 @@ LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
                         ncomp=ncomp_LMA_intact,
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
-
-LMA_intact_val_plot<-ggplot(LMA_jack_df,
-                            aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,300),ylim=c(0,300))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y=expression("Measured LMA (g/m"^2*")"),
-       x=expression("Predicted LMA (g/m"^2*")"))+
-  guides(color=F)
 
 ###################################
 ## save jackknife output
