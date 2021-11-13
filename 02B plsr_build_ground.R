@@ -125,7 +125,7 @@ ggplot(LMA_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
 ##########################################
 ## VIP plots
 
-source("Senesced_JCB/VIP.R")
+source("VIP.R")
 
 VIP_ground<-data.frame(NDF=VIP(NDF_ground)[ncomp_NDF_ground,],
                        ADF=VIP(ADF_ground)[ncomp_ADF_ground,],
@@ -301,11 +301,11 @@ ground_val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
   ggtitle("Ground-leaf spectra")+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))
 
-perRMSE.df<-data.frame(NDF=unlist(lapply(NDF_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                  ADF=unlist(lapply(ADF_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                  perC=unlist(lapply(perC_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                  perN=unlist(lapply(perN_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
-                  LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))))
+perRMSE.df<-data.frame(NDF=unlist(lapply(NDF_jack_stats,function(x) 100*x[["perRMSE"]])),
+                  ADF=unlist(lapply(ADF_jack_stats,function(x) 100*x[["perRMSE"]])),
+                  perC=unlist(lapply(perC_jack_stats,function(x) 100*x[["perRMSE"]])),
+                  perN=unlist(lapply(perN_jack_stats,function(x) 100*x[["perRMSE"]])),
+                  LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["perRMSE"]])))
 
 perRMSE.long<-melt(perRMSE.df)
 ground_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
@@ -315,6 +315,10 @@ ground_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   labs(y="%RMSE",x="Trait")+
   scale_y_continuous(expand = c(0, 0),
                      limits = c(0,max(perRMSE.long$value)*1.1))
+
+pdf("Manuscript/FigS2.pdf",height=8,width=6)
+(ground_val_R2/ground_val_perRMSE)
+dev.off()
 
 #######################################
 ## compare with spectra from the B4WARMED decomp experiment
