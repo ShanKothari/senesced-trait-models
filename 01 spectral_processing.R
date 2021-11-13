@@ -1,4 +1,5 @@
 library(spectrolab)
+library(caret)
 setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 
 #######################################
@@ -128,7 +129,7 @@ train_sample <- createDataPartition(
   p = .8,
   list = FALSE
 )
-test_sample<-setdiff(1:nrow(reflectance(ground_spec_agg)),train_sample)
+test_sample<-setdiff(1:nrow(ground_spec_agg),train_sample)
 
 ground_spec_agg_train<-ground_spec_agg[train_sample,]
 ground_spec_agg_test<-ground_spec_agg[test_sample,]
@@ -143,34 +144,46 @@ intact_quantiles<-quantile(intact_spec_agg,probs=c(0,0.025,0.5,0.975,1))
 intact_CV<-apply(intact_spec_agg,2,function(x) sd(x)/mean(x))
 
 intact_spec_plot<-ggplot()+
-  geom_line(aes(x=400:2400,y=reflectance(intact_quantiles)[3,]),size=1)+
-  geom_line(aes(x=400:2400,y=reflectance(intact_quantiles)[2,]),size=1,linetype="dashed")+
-  geom_line(aes(x=400:2400,y=reflectance(intact_quantiles)[4,]),size=1,linetype="dashed")+
-  geom_line(aes(x=400:2400,y=reflectance(intact_quantiles)[1,]),size=1,linetype="dotted")+
-  geom_line(aes(x=400:2400,y=reflectance(intact_quantiles)[5,]),size=1,linetype="dotted")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(intact_quantiles)[1,],
+                  ymax = as.matrix(intact_quantiles)[5,]),
+              alpha = 0.5,fill = "light blue")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(intact_quantiles)[2,],
+                  ymax = as.matrix(intact_quantiles)[4,]),
+              alpha = 0.5,fill = "blue")+
+  geom_line(aes(x=400:2400,y=as.matrix(intact_quantiles)[3,]),size=1,color="black")+
   geom_line(aes(x=400:2400,y=intact_CV),size=1,color="red")+
   theme_bw()+
   theme(text = element_text(size=20),
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())+
-  labs(x="Wavelength",y="Reflectance (or CV)")+lims(y=c(0,1))+
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
+  labs(x="Wavelength",y="Reflectance (or CV)")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ggtitle("Intact-leaf spectra")
 
 ground_quantiles<-quantile(ground_spec_agg,probs=c(0,0.025,0.5,0.975,1))
 ground_CV<-apply(ground_spec_agg,2,function(x) sd(x)/mean(x))
 
 ground_spec_plot<-ggplot()+
-  geom_line(aes(x=400:2400,y=reflectance(ground_quantiles)[3,]),size=1)+
-  geom_line(aes(x=400:2400,y=reflectance(ground_quantiles)[2,]),size=1,linetype="dashed")+
-  geom_line(aes(x=400:2400,y=reflectance(ground_quantiles)[4,]),size=1,linetype="dashed")+
-  geom_line(aes(x=400:2400,y=reflectance(ground_quantiles)[1,]),size=1,linetype="dotted")+
-  geom_line(aes(x=400:2400,y=reflectance(ground_quantiles)[5,]),size=1,linetype="dotted")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(ground_quantiles)[1,],
+                  ymax = as.matrix(ground_quantiles)[5,]),
+              alpha = 0.5,fill = "light blue")+
+  geom_ribbon(aes(x=400:2400,
+                  ymin = as.matrix(ground_quantiles)[2,],
+                  ymax = as.matrix(ground_quantiles)[4,]),
+              alpha = 0.5,fill = "blue")+
+  geom_line(aes(x=400:2400,y=as.matrix(ground_quantiles)[3,]),size=1,color="black")+
   geom_line(aes(x=400:2400,y=ground_CV),size=1,color="red")+
   theme_bw()+
   theme(text = element_text(size=20),
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank())+
-  labs(x="Wavelength",y="Reflectance (or CV)")+lims(y=c(0,1))+
+        panel.grid.minor = element_blank())+
+  labs(x="Wavelength",y="Reflectance (or CV)")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ggtitle("Ground-leaf spectra")

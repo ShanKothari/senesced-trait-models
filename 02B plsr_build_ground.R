@@ -3,7 +3,6 @@ setwd("C:/Users/kotha020/Dropbox/TraitModels2018/")
 library(spectrolab)
 library(pls)
 library(ggplot2)
-library(caret)
 library(vegan)
 library(rdist)
 library(reshape2)
@@ -11,22 +10,22 @@ library(reshape2)
 ############################################
 ## build initial PLSR models for calibration data
 
-NDF_ground<-plsr(meta(ground_spec_agg_train)$NDF~reflectance(ground_spec_agg_train),
+NDF_ground<-plsr(meta(ground_spec_agg_train)$NDF~as.matrix(ground_spec_agg_train),
             ncomp=30,method = "oscorespls",validation="CV",segments=10)
-# NDF_ground<-plsr(meta(ground_spec_agg_train)$NDF~log(1/reflectance(ground_spec_agg_train)),
+# NDF_ground<-plsr(meta(ground_spec_agg_train)$NDF~log(1/as.matrix(ground_spec_agg_train)),
 #                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-ADF_ground<-plsr(meta(ground_spec_agg_train)$ADF~reflectance(ground_spec_agg_train),
+ADF_ground<-plsr(meta(ground_spec_agg_train)$ADF~as.matrix(ground_spec_agg_train),
             ncomp=30,method = "oscorespls",validation="CV",segments=10)
-# ADF_ground<-plsr(meta(ground_spec_agg_train)$ADF~log(1/reflectance(ground_spec_agg_train)),
+# ADF_ground<-plsr(meta(ground_spec_agg_train)$ADF~log(1/as.matrix(ground_spec_agg_train)),
 #                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perC_ground<-plsr(meta(ground_spec_agg_train)$perC~reflectance(ground_spec_agg_train),
+perC_ground<-plsr(meta(ground_spec_agg_train)$perC~as.matrix(ground_spec_agg_train),
            ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perN_ground<-plsr(meta(ground_spec_agg_train)$perN~reflectance(ground_spec_agg_train),
+perN_ground<-plsr(meta(ground_spec_agg_train)$perN~as.matrix(ground_spec_agg_train),
            ncomp=30,method = "oscorespls",validation="CV",segments=10)
-LMA_ground<-plsr(meta(ground_spec_agg_train)$LMA~reflectance(ground_spec_agg_train),
+LMA_ground<-plsr(meta(ground_spec_agg_train)$LMA~as.matrix(ground_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
 
-# ADFN_ground<-plsr(meta(ground_spec_agg_train)$ADF/meta(ground_spec_agg_train)$perN~reflectance(ground_spec_agg_train),
+# ADFN_ground<-plsr(meta(ground_spec_agg_train)$ADF/meta(ground_spec_agg_train)$perN~as.matrix(ground_spec_agg_train),
 #            ncomp=30,validation="LOO")
 
 ############################################
@@ -174,18 +173,18 @@ for(i in 1:nreps){
   calib_jack<-ground_spec_agg_train[train_jack]
   val_jack<-ground_spec_agg_train[test_jack]
 
-  NDF_ground_jack<-plsr(meta(calib_jack)$NDF~reflectance(calib_jack),
+  NDF_ground_jack<-plsr(meta(calib_jack)$NDF~as.matrix(calib_jack),
                    ncomp=30,method = "oscorespls",validation="none")
-  ADF_ground_jack<-plsr(meta(calib_jack)$ADF~reflectance(calib_jack),
+  ADF_ground_jack<-plsr(meta(calib_jack)$ADF~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
-  perC_ground_jack<-plsr(meta(calib_jack)$perC~reflectance(calib_jack),
+  perC_ground_jack<-plsr(meta(calib_jack)$perC~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
-  perN_ground_jack<-plsr(meta(calib_jack)$perN~reflectance(calib_jack),
+  perN_ground_jack<-plsr(meta(calib_jack)$perN~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
-  LMA_ground_jack<-plsr(meta(calib_jack)$LMA~reflectance(calib_jack),
+  LMA_ground_jack<-plsr(meta(calib_jack)$LMA~as.matrix(calib_jack),
                          ncomp=30,method = "oscorespls",validation="none")
   
-  NDF_jack_val_pred<-as.vector(predict(NDF_ground_jack,newdata=reflectance(val_jack),ncomp=ncomp_NDF_ground)[,,1])
+  NDF_jack_val_pred<-as.vector(predict(NDF_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_NDF_ground)[,,1])
   NDF_jack_val_fit<-lm(NDF_jack_val_pred~meta(val_jack)$NDF)
   NDF_jack_stats[[i]]<-c(R2=summary(NDF_jack_val_fit)$r.squared,
                          RMSE=sqrt(c(crossprod(NDF_jack_val_fit$residuals))/length(NDF_jack_val_fit$residuals)),
@@ -193,7 +192,7 @@ for(i in 1:nreps){
                          min.val=min(meta(val_jack)$NDF,na.rm=T),
                          bias=mean(NDF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$NDF,na.rm=T))
   
-  ADF_jack_val_pred<-as.vector(predict(ADF_ground_jack,newdata=reflectance(val_jack),ncomp=ncomp_ADF_ground)[,,1])
+  ADF_jack_val_pred<-as.vector(predict(ADF_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_ADF_ground)[,,1])
   ADF_jack_val_fit<-lm(ADF_jack_val_pred~meta(val_jack)$ADF)
   ADF_jack_stats[[i]]<-c(R2=summary(ADF_jack_val_fit)$r.squared,
                          RMSE=sqrt(c(crossprod(ADF_jack_val_fit$residuals))/length(ADF_jack_val_fit$residuals)),
@@ -201,7 +200,7 @@ for(i in 1:nreps){
                          min.val=min(meta(val_jack)$ADF,na.rm=T),
                          bias=mean(ADF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$ADF,na.rm=T))
   
-  perC_jack_val_pred<-as.vector(predict(perC_ground_jack,newdata=reflectance(val_jack),ncomp=ncomp_perC_ground)[,,1])
+  perC_jack_val_pred<-as.vector(predict(perC_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_ground)[,,1])
   perC_jack_val_fit<-lm(perC_jack_val_pred~meta(val_jack)$perC)
   perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
                          RMSE=sqrt(c(crossprod(perC_jack_val_fit$residuals))/length(perC_jack_val_fit$residuals)),
@@ -209,7 +208,7 @@ for(i in 1:nreps){
                          min.val=min(meta(val_jack)$perC,na.rm=T),
                          bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
   
-  perN_jack_val_pred<-as.vector(predict(perN_ground_jack,newdata=reflectance(val_jack),ncomp=ncomp_perN_ground)[,,1])
+  perN_jack_val_pred<-as.vector(predict(perN_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_ground)[,,1])
   perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
   perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
                          RMSE=sqrt(c(crossprod(perN_jack_val_fit$residuals))/length(perN_jack_val_fit$residuals)),
@@ -217,7 +216,7 @@ for(i in 1:nreps){
                          min.val=min(meta(val_jack)$perN,na.rm=T),
                          bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
   
-  LMA_jack_val_pred<-as.vector(predict(LMA_ground_jack,newdata=reflectance(val_jack),ncomp=ncomp_LMA_ground)[,,1])
+  LMA_jack_val_pred<-as.vector(predict(LMA_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_ground)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
   LMA_jack_stats[[i]]<-c(R2=summary(LMA_jack_val_fit)$r.squared,
                          RMSE=sqrt(c(crossprod(LMA_jack_val_fit$residuals))/length(LMA_jack_val_fit$residuals)),
@@ -233,7 +232,7 @@ for(i in 1:nreps){
   
 }
 
-NDF_jack_pred<-t(apply(reflectance(ground_spec_agg_test),1,function(spec) {
+NDF_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
   preds<-lapply(NDF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
@@ -260,7 +259,7 @@ NDF_ground_val_plot<-ggplot(NDF_jack_df,aes(y=Measured*100,x=pred_mean*100,color
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle("Predicting NDF from ground-leaf spectra")+guides(color=F)
 
-ADF_jack_pred<-t(apply(reflectance(ground_spec_agg_test),1,function(spec) {
+ADF_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
   preds<-lapply(ADF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
@@ -287,7 +286,7 @@ ADF_ground_val_plot<-ggplot(ADF_jack_df,aes(y=Measured*100,x=pred_mean*100,color
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle("Predicting ADF from ground-leaf spectra")+guides(color=F)
 
-perC_jack_pred<-t(apply(reflectance(ground_spec_agg_test),1,function(spec) {
+perC_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
   preds<-lapply(perC_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
@@ -314,7 +313,7 @@ perC_ground_val_plot<-ggplot(perC_jack_df,aes(y=Measured*100,x=pred_mean*100,col
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle(expression("Predicting C"[mass]*" from ground-leaf spectra"))+guides(color=F)
 
-perN_jack_pred<-t(apply(reflectance(ground_spec_agg_test),1,function(spec) {
+perN_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
   preds<-lapply(perN_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
@@ -341,7 +340,7 @@ perN_ground_val_plot<-ggplot(perN_jack_df,aes(y=Measured*100,x=pred_mean*100,col
   labs(y="Measured (%)",x="Predicted (%)")+
   ggtitle(expression("Predicting N"[mass]*" from ground-leaf spectra"))+guides(color=F)
 
-LMA_jack_pred<-t(apply(reflectance(ground_spec_agg_test),1,function(spec) {
+LMA_jack_pred<-t(apply(as.matrix(ground_spec_agg_test),1,function(spec) {
   preds<-lapply(LMA_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
@@ -411,28 +410,28 @@ match_ids_decomp<-match(decomp_chem$full_id,meta(decomp_agg)$full_id)
 
 # N_decomp_predict<-predict(perN_ground,
 #                           ncomp=ncomp_perN_ground,
-#                           newdata=reflectance(decomp_agg[,400:2500]))
+#                           newdata=as.matrix(decomp_agg[,400:2500]))
 # decomp_chem$predN<-N_decomp_predict[match_ids_decomp]
 
-perC_jack_pred_decomp<-t(apply(reflectance(decomp_agg[,400:2500]),1,function(spec) {
+perC_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
   preds<-lapply(perC_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
 decomp_chem$predC<-rowMeans(perC_jack_pred_decomp)[match_ids_decomp]
 
-perN_jack_pred_decomp<-t(apply(reflectance(decomp_agg[,400:2500]),1,function(spec) {
+perN_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
   preds<-lapply(perN_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
 decomp_chem$predN<-rowMeans(perN_jack_pred_decomp)[match_ids_decomp]
 
-NDF_jack_pred_decomp<-t(apply(reflectance(decomp_agg[,400:2500]),1,function(spec) {
+NDF_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
   preds<-lapply(NDF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
 decomp_chem$predNDF<-rowMeans(NDF_jack_pred_decomp)[match_ids_decomp]
 
-ADF_jack_pred_decomp<-t(apply(reflectance(decomp_agg[,400:2500]),1,function(spec) {
+ADF_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
   preds<-lapply(ADF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
   return(unlist(preds))
 }))
