@@ -211,56 +211,49 @@ for(i in 1:nreps){
   NDF_jack_val_fit<-lm(NDF_jack_val_pred~meta(val_jack)$NDF)
   NDF_jack_stats[[i]]<-c(R2=summary(NDF_jack_val_fit)$r.squared,
                          RMSE=RMSD(meta(val_jack)$NDF,NDF_jack_val_pred),
-                         max.val=max(meta(val_jack)$NDF,na.rm=T),
-                         min.val=min(meta(val_jack)$NDF,na.rm=T),
+                         perRMSE=percentRMSD(meta(val_jack)$NDF,NDF_jack_val_pred,0.025,0.975),
                          bias=mean(NDF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$NDF,na.rm=T))
   
   ADF_jack_val_pred<-as.vector(predict(ADF_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_ADF_intact)[,,1])
   ADF_jack_val_fit<-lm(ADF_jack_val_pred~meta(val_jack)$ADF)
   ADF_jack_stats[[i]]<-c(R2=summary(ADF_jack_val_fit)$r.squared,
                          RMSE=RMSD(meta(val_jack)$ADF,ADF_jack_val_pred),
-                         max.val=max(meta(val_jack)$ADF,na.rm=T),
-                         min.val=min(meta(val_jack)$ADF,na.rm=T),
+                         perRMSE=percentRMSD(meta(val_jack)$ADF,ADF_jack_val_pred,0.025,0.975),
                          bias=mean(ADF_jack_val_pred,na.rm=T)-mean(meta(val_jack)$ADF,na.rm=T))
   
   perC_jack_val_pred<-as.vector(predict(perC_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_intact)[,,1])
   perC_jack_val_fit<-lm(perC_jack_val_pred~meta(val_jack)$perC)
   perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
                           RMSE=RMSD(meta(val_jack)$perC,perC_jack_val_pred),
-                          max.val=max(meta(val_jack)$perC,na.rm=T),
-                          min.val=min(meta(val_jack)$perC,na.rm=T),
+                          perRMSE=percentRMSD(meta(val_jack)$perC,perC_jack_val_pred,0.025,0.975),
                           bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
   
   perN_jack_val_pred<-as.vector(predict(perN_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_intact)[,,1])
   perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
   perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
                           RMSE=RMSD(meta(val_jack)$perN,perN_jack_val_pred),
-                          max.val=max(meta(val_jack)$perN,na.rm=T),
-                          min.val=min(meta(val_jack)$perN,na.rm=T),
+                          perRMSE=percentRMSD(meta(val_jack)$perN,perN_jack_val_pred,0.025,0.975),
                           bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
   
   perC_area_jack_val_pred<-as.vector(predict(perC_area_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_area_intact)[,,1])
   perC_area_jack_val_fit<-lm(perC_area_jack_val_pred~meta(val_jack)$perC_area)
   perC_area_jack_stats[[i]]<-c(R2=summary(perC_area_jack_val_fit)$r.squared,
                                RMSE=RMSD(meta(val_jack)$perC_area,perC_area_jack_val_pred),
-                          max.val=max(meta(val_jack)$perC_area,na.rm=T),
-                          min.val=min(meta(val_jack)$perC_area,na.rm=T),
+                               perRMSE=percentRMSD(meta(val_jack)$perC_area,perC_area_jack_val_pred,0.025,0.975),
                           bias=mean(perC_area_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC_area,na.rm=T))
   
   perN_area_jack_val_pred<-as.vector(predict(perN_area_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_area_intact)[,,1])
   perN_area_jack_val_fit<-lm(perN_area_jack_val_pred~meta(val_jack)$perN_area)
   perN_area_jack_stats[[i]]<-c(R2=summary(perN_area_jack_val_fit)$r.squared,
                                RMSE=RMSD(meta(val_jack)$perN_area,perN_area_jack_val_pred),
-                          max.val=max(meta(val_jack)$perN_area,na.rm=T),
-                          min.val=min(meta(val_jack)$perN_area,na.rm=T),
+                               perRMSE=percentRMSD(meta(val_jack)$perN_area,perN_area_jack_val_pred,0.025,0.975),
                           bias=mean(perN_area_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN_area,na.rm=T))
   
   LMA_jack_val_pred<-as.vector(predict(LMA_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_intact)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
   LMA_jack_stats[[i]]<-c(R2=summary(LMA_jack_val_fit)$r.squared,
                          RMSE=RMSD(meta(val_jack)$LMA,LMA_jack_val_pred),
-                         max.val=max(meta(val_jack)$LMA,na.rm=T),
-                         min.val=min(meta(val_jack)$LMA,na.rm=T),
+                         perRMSE=percentRMSD(meta(val_jack)$LMA,LMA_jack_val_pred,0.025,0.975),
                          bias=mean(LMA_jack_val_pred,na.rm=T)-mean(meta(val_jack)$LMA,na.rm=T))
   
   NDF_jack_coefs[[i]]<-as.vector(coef(NDF_intact_jack,ncomp=ncomp_NDF_intact,intercept=TRUE))
