@@ -1,5 +1,6 @@
 library(spectrolab)
 library(caret)
+library(patchwork)
 setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 
 #######################################
@@ -140,7 +141,7 @@ intact_spec_agg_test<-intact_spec_agg[test_sample,]
 ####################################
 ## plot spectra
 
-intact_quantiles<-quantile(intact_spec_agg,probs=c(0,0.025,0.5,0.975,1))
+intact_quantiles<-quantile(intact_spec_agg,probs=c(0.025,0.25,0.5,0.75,0.975))
 intact_CV<-apply(intact_spec_agg,2,function(x) sd(x)/mean(x))
 
 intact_spec_plot<-ggplot()+
@@ -165,7 +166,7 @@ intact_spec_plot<-ggplot()+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ggtitle("Intact-leaf spectra")
 
-ground_quantiles<-quantile(ground_spec_agg,probs=c(0,0.025,0.5,0.975,1))
+ground_quantiles<-quantile(ground_spec_agg,probs=c(0.025,0.25,0.5,0.75,0.975))
 ground_CV<-apply(ground_spec_agg,2,function(x) sd(x)/mean(x))
 
 ground_spec_plot<-ggplot()+
@@ -187,3 +188,7 @@ ground_spec_plot<-ggplot()+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ggtitle("Ground-leaf spectra")
+
+pdf("Manuscript/Fig1.pdf",height=8,width=6)
+intact_spec_plot/ground_spec_plot
+dev.off()
