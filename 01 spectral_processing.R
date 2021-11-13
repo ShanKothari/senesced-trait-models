@@ -1,11 +1,11 @@
 library(spectrolab)
-setwd("C:/Users/kotha020/Dropbox/TraitModels2018/")
+setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
 
 #######################################
 ## read intact spectra
 
-source("SenescencePaper/read_spec.R")
-intact_spec <- read.sed.multiple("SenescencePaper/Intact_Spectra_Raw/")
+source("Scripts/senesced-trait-models/read_spec.R")
+intact_spec <- read.sed.multiple("Intact_Spectra_Raw/")
 intact_spec <- intact_spec[,400:2400]
 intact_spec_names<-names(intact_spec)
 intact_spec_spl<-strsplit(x = intact_spec_names, split = "_")
@@ -17,12 +17,13 @@ meta(intact_spec)$sp<-unlist(lapply(intact_spec_spl, function(x) ifelse(x[[2]] %
 meta(intact_spec)$num<-unlist(lapply(intact_spec_spl, function(x) x[[4]]))
 meta(intact_spec)$ID<-apply(meta(intact_spec),1,function(x) paste(x,collapse = "_"))
 ## decimal rather than percent
-reflectance(intact_spec)<-reflectance(intact_spec)/100
+intact_spec<-intact_spec/100
 
 ## sensor matching is imperfect
-intact_spec_matched<-match_sensors(intact_spec, splice_at=c(990), fixed_sensor = 2, interpolate_wvl = 5,
+intact_spec_matched<-match_sensors(intact_spec, splice_at=c(983), fixed_sensor = 2, interpolate_wvl = 5,
                                    factor_range = c(0.5, 3))
-intact_spec_matched<-smooth(intact_spec_matched)
+## spline smoothing if desired
+# intact_spec_matched<-smooth(intact_spec_matched)
 
 intact_spec_agg<-aggregate(intact_spec_matched,by=meta(intact_spec_matched)$ID,
                            FUN=try_keep_txt(mean))
@@ -31,7 +32,7 @@ intact_spec_agg<-aggregate(intact_spec_matched,by=meta(intact_spec_matched)$ID,
 #######################################
 ## read ground spectra
 
-ground_spec<-read_spectra(path = "Senesced_JCB/Ground_Spectra_Raw","sed",exclude_if_matches = c("BAD","WR"))
+ground_spec<-read_spectra(path = "Ground_Spectra_Raw","sed",exclude_if_matches = c("BAD","WR"))
 ground_spec <- ground_spec[,400:2400]
 ground_spec_names<-names(ground_spec)
 ground_spec_spl<-strsplit(x = ground_spec_names, split = "_")
