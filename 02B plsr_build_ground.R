@@ -297,8 +297,9 @@ ground_val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
   theme(text = element_text(size=20),
         axis.title.x = element_blank(),
         axis.text.x = element_blank())+
-  labs(y="R2",x="Trait")+
-  ggtitle("Ground-leaf spectra")
+  labs(y=expression(italic("R"^2)),x="Trait")+
+  ggtitle("Ground-leaf spectra")+
+  scale_y_continuous(expand = c(0, 0),limits=c(0,1))
 
 perRMSE.df<-data.frame(NDF=unlist(lapply(NDF_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
                   ADF=unlist(lapply(ADF_jack_stats,function(x) 100*x[["RMSE"]]/(x[["max.val"]]-x[["min.val"]]))),
@@ -309,8 +310,11 @@ perRMSE.df<-data.frame(NDF=unlist(lapply(NDF_jack_stats,function(x) 100*x[["RMSE
 perRMSE.long<-melt(perRMSE.df)
 ground_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   geom_violin()+theme_bw()+
-  theme(text = element_text(size=20))+
-  labs(y="%RMSE",x="Trait")
+  theme(text = element_text(size=20),
+        axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5))+
+  labs(y="%RMSE",x="Trait")+
+  scale_y_continuous(expand = c(0, 0),
+                     limits = c(0,max(perRMSE.long$value)*1.1))
 
 #######################################
 ## compare with spectra from the B4WARMED decomp experiment
