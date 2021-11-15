@@ -228,8 +228,7 @@ ADF_ground_val_plot<-ggplot(ground_jack_df_list$ADF,
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
-  labs(y="Measured ADF (%)",x="Predicted ADF (%)")+
-  guides(color=F)
+  labs(y="Measured ADF (%)",x="Predicted ADF (%)")
 
 perC_ground_val_plot<-ggplot(ground_jack_df_list$perC,
                              aes(y=Measured,x=pred_mean,color=Species))+
@@ -277,25 +276,24 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y=expression("Measured LMA (g/m"^2*")"),
-       x=expression("Predicted LMA (g/m"^2*")"))+
-  guides(color=F)
+       x=expression("Predicted LMA (g/m"^2*")"))
 
 ################################
 ## arrange plots
 
-pdf("Manuscript/Fig2.pdf",height=12,width=8)
+pdf("Manuscript/Fig2.pdf",height=12,width=9)
 (perC_intact_val_plot/perN_intact_val_plot/LMA_intact_val_plot)|
   (perC_ground_val_plot/perN_ground_val_plot/LMA_ground_val_plot) +
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
+  plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig3.pdf",height=8,width=8)
+pdf("Manuscript/Fig3.pdf",height=8,width=8.5)
 (NDF_intact_val_plot/ADF_intact_val_plot)|
   (NDF_ground_val_plot/ADF_ground_val_plot) +
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
+  plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig4.pdf",height=12,width=6)
+pdf("Manuscript/Fig4.pdf",height=8,width=5.5)
 (perC_area_intact_val_plot/perN_area_intact_val_plot) +
-  plot_layout(guides="collect") & theme(legend.position = "bottom")
+  plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
