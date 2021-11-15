@@ -323,8 +323,8 @@ dev.off()
 #######################################
 ## compare with spectra from the B4WARMED decomp experiment
 
-source("Senesced_JCB/Decomp/process_decomp.R")
-decomp_chem<-read.csv("Senesced_JCB/Decomp/stoich_leaves.csv")
+source("Decomp/process_decomp.R")
+decomp_chem<-read.csv("Decomp/stoich_leaves.csv")
 colnames(decomp_chem)<-c("site","habitat","trt","species","perN","perC",
                          "solubles","NDF","hemi","ADF","cellulose","ADL")
 decomp_chem$habitat<-toupper(decomp_chem$habitat)
@@ -338,28 +338,16 @@ match_ids_decomp<-match(decomp_chem$full_id,meta(decomp_agg)$full_id)
 #                           newdata=as.matrix(decomp_agg[,400:2500]))
 # decomp_chem$predN<-N_decomp_predict[match_ids_decomp]
 
-perC_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
-  preds<-lapply(perC_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
+perC_jack_pred_decomp<-apply.coefs(perC_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$predC<-rowMeans(perC_jack_pred_decomp)[match_ids_decomp]
 
-perN_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
-  preds<-lapply(perN_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
+perN_jack_pred_decomp<-apply.coefs(perN_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$predN<-rowMeans(perN_jack_pred_decomp)[match_ids_decomp]
 
-NDF_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
-  preds<-lapply(NDF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
+NDF_jack_pred_decomp<-apply.coefs(NDF_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$predNDF<-rowMeans(NDF_jack_pred_decomp)[match_ids_decomp]
 
-ADF_jack_pred_decomp<-t(apply(as.matrix(decomp_agg[,400:2500]),1,function(spec) {
-  preds<-lapply(ADF_jack_coefs,function(coef) coef[1]+sum(coef[-1]*spec))
-  return(unlist(preds))
-}))
+ADF_jack_pred_decomp<-apply.coefs(ADF_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$predADF<-rowMeans(ADF_jack_pred_decomp)[match_ids_decomp]
 
 ggplot(decomp_chem,aes(x=predN,y=perN/100))+
