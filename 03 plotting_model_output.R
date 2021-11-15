@@ -107,7 +107,7 @@ NDF_intact_val_plot<-ggplot(intact_jack_df_list$NDF,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(25,75),ylim=c(25,75))+
+  coord_cartesian(xlim=c(NDF_lower,NDF_upper),ylim=c(NDF_lower,NDF_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured NDF (%)",x="Predicted NDF (%)")+
@@ -121,7 +121,7 @@ ADF_intact_val_plot<-ggplot(intact_jack_df_list$ADF,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(18,58),ylim=c(18,58))+
+  coord_cartesian(xlim=c(ADF_lower,ADF_upper),c(ADF_lower,ADF_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured ADF (%)",x="Predicted ADF (%)")+
@@ -134,7 +134,7 @@ perC_intact_val_plot<-ggplot(intact_jack_df_list$perC,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(40,63),ylim=c(40,63))+
+  coord_cartesian(xlim=c(perC_lower,perC_upper),ylim=c(perC_lower,perC_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured C"[mass]*" (%)"),
@@ -149,7 +149,7 @@ perN_intact_val_plot<-ggplot(intact_jack_df_list$perN,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
+  coord_cartesian(xlim=c(perN_lower,perN_upper),ylim=c(perN_lower,perN_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured N"[mass]*" (%)"),
@@ -163,7 +163,8 @@ perC_area_intact_val_plot<-ggplot(intact_jack_df_list$perC_area,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,200),ylim=c(0,200))+
+  coord_cartesian(c(perC_area_lower,perC_area_upper),
+                  c(perC_area_lower,perC_area_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured C"[area]*" (g/m"^2*")"),
@@ -177,7 +178,8 @@ perN_area_intact_val_plot<-ggplot(intact_jack_df_list$perN_area,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
+  coord_cartesian(c(perN_area_lower,perN_area_upper),
+                  c(perN_area_lower,perN_area_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured N"[area]*" (g/m"^2*")"),
@@ -191,7 +193,7 @@ LMA_intact_val_plot<-ggplot(intact_jack_df_list$LMA,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,300),ylim=c(0,300))+
+  coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured LMA (g/m"^2*")"),
@@ -205,7 +207,7 @@ NDF_ground_val_plot<-ggplot(ground_jack_df_list$NDF,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(25,75),ylim=c(25,75))+
+  coord_cartesian(xlim=c(NDF_lower,NDF_upper),ylim=c(NDF_lower,NDF_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
@@ -221,7 +223,7 @@ ADF_ground_val_plot<-ggplot(ground_jack_df_list$ADF,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(18,58),ylim=c(18,58))+
+  coord_cartesian(xlim=c(ADF_lower,ADF_upper),ylim=c(ADF_lower,ADF_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
@@ -236,7 +238,7 @@ perC_ground_val_plot<-ggplot(ground_jack_df_list$perC,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(40,63),ylim=c(40,63))+
+  coord_cartesian(xlim=c(perC_lower,perC_upper),ylim=c(perC_lower,perC_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
@@ -253,7 +255,7 @@ perN_ground_val_plot<-ggplot(ground_jack_df_list$perN,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
+  coord_cartesian(xlim=c(perN_lower,perN_upper),ylim=c(perN_lower,perN_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
@@ -269,7 +271,7 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,300),ylim=c(0,300))+
+  coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
