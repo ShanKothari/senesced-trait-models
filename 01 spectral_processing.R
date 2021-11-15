@@ -130,7 +130,7 @@ meta(ground_spec_agg)$perN_area<-with(meta(ground_spec_agg),perN*LMA)/100
 
 train_sample <- createDataPartition(
   y = meta(ground_spec_agg)$sp,
-  p = .8,
+  p = .75,
   list = FALSE
 )
 test_sample<-setdiff(1:nrow(ground_spec_agg),train_sample)
@@ -138,8 +138,10 @@ test_sample<-setdiff(1:nrow(ground_spec_agg),train_sample)
 ground_spec_agg_train<-ground_spec_agg[train_sample,]
 ground_spec_agg_test<-ground_spec_agg[test_sample,]
 
-intact_spec_agg_train<-intact_spec_agg[train_sample,]
-intact_spec_agg_test<-intact_spec_agg[test_sample,]
+## this assigns the one intact specimen not in the ground dataset
+## to the training data
+intact_spec_agg_train<-intact_spec_agg[-which(names(intact_spec_agg) %in% names(ground_spec_agg_test)),]
+intact_spec_agg_test<-intact_spec_agg[which(names(intact_spec_agg) %in% names(ground_spec_agg_test)),]
 
 saveRDS(intact_spec_agg_train,"SavedResults/intact_spec_agg_train.rds")
 saveRDS(intact_spec_agg_test,"SavedResults/intact_spec_agg_test.rds")
