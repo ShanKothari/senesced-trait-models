@@ -270,7 +270,7 @@ NDF_jack_pred<-apply.coefs(NDF_jack_coefs,as.matrix(intact_spec_agg_test))
 NDF_jack_stat<-t(apply(NDF_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
 NDF_jack_df<-data.frame(pred_mean=NDF_jack_stat[,1],
                         pred_low=NDF_jack_stat[,2],
-                        pred_high=NDF_jack_stat[3],
+                        pred_high=NDF_jack_stat[,3],
                         Measured=meta(intact_spec_agg_test)$NDF,
                         ncomp=ncomp_NDF_intact,
                         Species=meta(intact_spec_agg_test)$sp,
