@@ -44,7 +44,7 @@ NDF_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[NDF_ground_valid],
                              Run=meta(ground_spec_agg_train)$FiberRun[NDF_ground_valid],
                              Measured=meta(ground_spec_agg_train)$NDF[NDF_ground_valid],
                              val_pred=NDF_ground$validation$pred[,,ncomp_NDF_ground])
-ggplot(NDF_ground_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(NDF_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -61,7 +61,7 @@ ADF_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[ADF_ground_valid],
                             Run=meta(ground_spec_agg_train)$FiberRun[ADF_ground_valid],
                             Measured=meta(ground_spec_agg_train)$ADF[ADF_ground_valid],
                             val_pred=ADF_ground$validation$pred[,,ncomp_ADF_ground])
-ggplot(ADF_ground_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(ADF_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -78,7 +78,7 @@ perC_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[perC_ground_valid
                               Run=meta(ground_spec_agg_train)$EARun[perC_ground_valid],
                               Measured=meta(ground_spec_agg_train)$perC[perC_ground_valid],
                               val_pred=perC_ground$validation$pred[,,ncomp_perC_ground])
-ggplot(perC_ground_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(perC_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -95,7 +95,7 @@ perN_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[perN_ground_valid
                              Run=meta(ground_spec_agg_train)$EARun[perN_ground_valid],
                              Measured=meta(ground_spec_agg_train)$perN[perN_ground_valid],
                              val_pred=perN_ground$validation$pred[,,ncomp_perN_ground])
-ggplot(perN_ground_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(perN_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+

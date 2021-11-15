@@ -69,12 +69,12 @@ mean(unlist(mean_spec_dist)*180/pi)
 fiber<-read.csv("FiberAnalysis/FiberSummary.csv")
 fiber<-fiber[-which(fiber$REDO %in% c("YES")),]
 
-meta(intact_spec_agg)$NDF<-fiber$NDF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]/100
-meta(intact_spec_agg)$ADF<-fiber$ADF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]/100
+meta(intact_spec_agg)$NDF<-fiber$NDF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
+meta(intact_spec_agg)$ADF<-fiber$ADF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 meta(intact_spec_agg)$FiberRun<-fiber$Run[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 
-meta(ground_spec_agg)$NDF<-fiber$NDF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]/100
-meta(ground_spec_agg)$ADF<-fiber$ADF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]/100
+meta(ground_spec_agg)$NDF<-fiber$NDF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
+meta(ground_spec_agg)$ADF<-fiber$ADF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 meta(ground_spec_agg)$FiberRun<-fiber$Run[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 
 ## elemental data
@@ -83,12 +83,12 @@ EAdata<-EAdata[-which(EAdata$REDO %in% c("YES")),]
 EAdata<-EAdata[-grep("duplicate",EAdata$SampleID),]
 EAdata<-EAdata[-grep("apple",EAdata$SampleID),]
 
-meta(intact_spec_agg)$perC<-EAdata$C.percent[match(meta(intact_spec_agg)$ID,EAdata$SampleID)]/100
-meta(intact_spec_agg)$perN<-EAdata$N.percent[match(meta(intact_spec_agg)$ID,EAdata$SampleID)]/100
+meta(intact_spec_agg)$perC<-EAdata$C.percent[match(meta(intact_spec_agg)$ID,EAdata$SampleID)]
+meta(intact_spec_agg)$perN<-EAdata$N.percent[match(meta(intact_spec_agg)$ID,EAdata$SampleID)]
 meta(intact_spec_agg)$EARun<-EAdata$Run[match(meta(intact_spec_agg)$ID,EAdata$SampleID)]
 
-meta(ground_spec_agg)$perC<-EAdata$C.percent[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]/100
-meta(ground_spec_agg)$perN<-EAdata$N.percent[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]/100
+meta(ground_spec_agg)$perC<-EAdata$C.percent[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]
+meta(ground_spec_agg)$perN<-EAdata$N.percent[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]
 meta(ground_spec_agg)$EARun<-EAdata$Run[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]
 
 ## LMA data
@@ -117,13 +117,13 @@ colnames(LMAdata_needle_agg)<-c("Plot","Species","Location","Number","LMA","ID")
 
 LMAdata<-rbind(LMAdata_broad,LMAdata_needle_agg)
 
-meta(intact_spec_agg)$LMA<-LMAdata$LMA[match(meta(intact_spec_agg)$ID,LMAdata$ID)]
-meta(intact_spec_agg)$perC_area<-with(meta(intact_spec_agg),perC*LMA)
-meta(intact_spec_agg)$perN_area<-with(meta(intact_spec_agg),perN*LMA)
+meta(intact_spec_agg)$LMA<-LMAdata$LMA[match(meta(intact_spec_agg)$ID,LMAdata$ID)]*10000
+meta(intact_spec_agg)$perC_area<-with(meta(intact_spec_agg),perC*LMA)/100
+meta(intact_spec_agg)$perN_area<-with(meta(intact_spec_agg),perN*LMA)/100
 
-meta(ground_spec_agg)$LMA<-LMAdata$LMA[match(meta(ground_spec_agg)$ID,LMAdata$ID)]
-meta(ground_spec_agg)$perC_area<-with(meta(ground_spec_agg),perC*LMA)
-meta(ground_spec_agg)$perN_area<-with(meta(ground_spec_agg),perN*LMA)
+meta(ground_spec_agg)$LMA<-LMAdata$LMA[match(meta(ground_spec_agg)$ID,LMAdata$ID)]*10000
+meta(ground_spec_agg)$perC_area<-with(meta(ground_spec_agg),perC*LMA)/100
+meta(ground_spec_agg)$perN_area<-with(meta(ground_spec_agg),perN*LMA)/100
 
 ####################################
 ## divide training and testing

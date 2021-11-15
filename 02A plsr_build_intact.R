@@ -38,7 +38,7 @@ NDF_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[NDF_intact_valid],
                             Run=meta(intact_spec_agg_train)$FiberRun[NDF_intact_valid],
                             Measured=meta(intact_spec_agg_train)$NDF[NDF_intact_valid],
                             val_pred=NDF_intact$validation$pred[,,ncomp_NDF_intact])
-ggplot(NDF_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(NDF_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -55,7 +55,7 @@ ADF_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[ADF_intact_valid],
                             Run=meta(intact_spec_agg_train)$FiberRun[ADF_intact_valid],
                             Measured=meta(intact_spec_agg_train)$ADF[ADF_intact_valid],
                             val_pred=ADF_intact$validation$pred[,,ncomp_ADF_intact])
-ggplot(ADF_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(ADF_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -72,7 +72,7 @@ perC_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perC_intact_valid
                              Run=meta(intact_spec_agg_train)$FiberRun[perC_intact_valid],
                              Measured=meta(intact_spec_agg_train)$perC[perC_intact_valid],
                              val_pred=perC_intact$validation$pred[,,ncomp_perC_intact])
-ggplot(perC_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(perC_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -89,7 +89,7 @@ perN_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perN_intact_valid
                              Run=meta(intact_spec_agg_train)$FiberRun[perN_intact_valid],
                              Measured=meta(intact_spec_agg_train)$perN[perN_intact_valid],
                              val_pred=perN_intact$validation$pred[,,ncomp_perN_intact])
-ggplot(perN_intact_pred,aes(x=Measured*100,y=val_pred*100,color=Species))+
+ggplot(perN_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+

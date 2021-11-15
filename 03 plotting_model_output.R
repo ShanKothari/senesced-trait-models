@@ -53,13 +53,58 @@ ground_jack_coef_list<-readRDS("SavedResults/ground_jack_coefs_list.rds")
 ground_jack_df_list<-readRDS("SavedResults/ground_jack_df_list.rds")
 
 ####################################
+## define plot boundaries
+
+all.NDF<-c(intact_jack_df_list$NDF$Measured,
+           intact_jack_df_list$NDF$pred_mean,
+           ground_jack_df_list$NDF$pred_mean)
+NDF_upper<-max(all.NDF,na.rm=T)+3
+NDF_lower<-min(all.NDF,na.rm=T)-3
+
+all.ADF<-c(intact_jack_df_list$ADF$Measured,
+           intact_jack_df_list$ADF$pred_mean,
+           ground_jack_df_list$ADF$pred_mean)
+ADF_upper<-max(all.ADF,na.rm=T)+2
+ADF_lower<-min(all.ADF,na.rm=T)-2
+
+all.perN<-c(intact_jack_df_list$perN$Measured,
+            intact_jack_df_list$perN$pred_mean,
+            ground_jack_df_list$perN$pred_mean)
+perN_upper<-max(all.perN,na.rm=T)+0.2
+perN_lower<-min(all.perN,na.rm=T)-0.2
+
+all.perC<-c(intact_jack_df_list$perC$Measured,
+            intact_jack_df_list$perC$pred_mean,
+            ground_jack_df_list$perC$pred_mean)
+perC_upper<-max(all.perC,na.rm=T)+2
+perC_lower<-min(all.perC,na.rm=T)-2
+
+all.perC_area<-c(intact_jack_df_list$perC_area$Measured,
+                 intact_jack_df_list$perC_area$pred_mean,
+                 ground_jack_df_list$perC_area$pred_mean)
+perC_area_upper<-max(all.perC_area,na.rm=T)+10
+perC_area_lower<-min(all.perC_area,na.rm=T)-10
+
+all.perN_area<-c(intact_jack_df_list$perN_area$Measured,
+                 intact_jack_df_list$perN_area$pred_mean,
+                 ground_jack_df_list$perN_area$pred_mean)
+perN_area_upper<-max(all.perN_area,na.rm=T)+0.2
+perN_area_lower<-min(all.perN_area,na.rm=T)-0.2
+
+all.LMA<-c(intact_jack_df_list$LMA$Measured,
+           intact_jack_df_list$LMA$pred_mean,
+           ground_jack_df_list$LMA$pred_mean)
+LMA_upper<-max(all.LMA,na.rm=T)+20
+LMA_lower<-min(all.LMA,na.rm=T)-20
+
+####################################
 ## create plots
 
 NDF_intact_val_plot<-ggplot(intact_jack_df_list$NDF,
-                            aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                            aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(25,75),ylim=c(25,75))+
@@ -70,10 +115,10 @@ NDF_intact_val_plot<-ggplot(intact_jack_df_list$NDF,
   ggtitle("Intact")
 
 ADF_intact_val_plot<-ggplot(intact_jack_df_list$ADF,
-                            aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                            aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(18,58),ylim=c(18,58))+
@@ -83,10 +128,10 @@ ADF_intact_val_plot<-ggplot(intact_jack_df_list$ADF,
   guides(color=F)
 
 perC_intact_val_plot<-ggplot(intact_jack_df_list$perC,
-                             aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(40,63),ylim=c(40,63))+
@@ -98,10 +143,10 @@ perC_intact_val_plot<-ggplot(intact_jack_df_list$perC,
   ggtitle("Intact")
 
 perN_intact_val_plot<-ggplot(intact_jack_df_list$perN,
-                             aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
@@ -112,10 +157,10 @@ perN_intact_val_plot<-ggplot(intact_jack_df_list$perN,
   guides(color=F)
 
 perC_area_intact_val_plot<-ggplot(intact_jack_df_list$perC_area,
-                                  aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
+                                  aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,200),ylim=c(0,200))+
@@ -126,10 +171,10 @@ perC_area_intact_val_plot<-ggplot(intact_jack_df_list$perC_area,
   ggtitle("Intact")
 
 perN_area_intact_val_plot<-ggplot(intact_jack_df_list$perN_area,
-                                  aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
+                                  aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
@@ -140,10 +185,10 @@ perN_area_intact_val_plot<-ggplot(intact_jack_df_list$perN_area,
   guides(color=F)
 
 LMA_intact_val_plot<-ggplot(intact_jack_df_list$LMA,
-                            aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
+                            aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,300),ylim=c(0,300))+
@@ -154,10 +199,10 @@ LMA_intact_val_plot<-ggplot(intact_jack_df_list$LMA,
   guides(color=F)
 
 NDF_ground_val_plot<-ggplot(ground_jack_df_list$NDF,
-                            aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                            aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(25,75),ylim=c(25,75))+
@@ -170,10 +215,10 @@ NDF_ground_val_plot<-ggplot(ground_jack_df_list$NDF,
   ggtitle("Ground")
 
 ADF_ground_val_plot<-ggplot(ground_jack_df_list$ADF,
-                            aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                            aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(18,58),ylim=c(18,58))+
@@ -185,10 +230,10 @@ ADF_ground_val_plot<-ggplot(ground_jack_df_list$ADF,
   guides(color=F)
 
 perC_ground_val_plot<-ggplot(ground_jack_df_list$perC,
-                             aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(40,63),ylim=c(40,63))+
@@ -202,10 +247,10 @@ perC_ground_val_plot<-ggplot(ground_jack_df_list$perC,
   ggtitle("Ground")
 
 perN_ground_val_plot<-ggplot(ground_jack_df_list$perN,
-                             aes(y=Measured*100,x=pred_mean*100,color=Species))+
+                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*100,xmin=pred_low*100,xmax=pred_high*100),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
@@ -218,10 +263,10 @@ perN_ground_val_plot<-ggplot(ground_jack_df_list$perN,
   guides(color=F)
 
 LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
-                            aes(y=Measured*10000,x=pred_mean*10000,color=Species))+
+                            aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
-  geom_errorbarh(aes(y=Measured*10000,xmin=pred_low*10000,xmax=pred_high*10000),
-                 color="gray",alpha=0.7)+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
   coord_cartesian(xlim=c(0,300),ylim=c(0,300))+
