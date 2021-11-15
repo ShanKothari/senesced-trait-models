@@ -110,7 +110,7 @@ ggplot(LMA_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.03),ylim=c(0,0.03))+
+  coord_cartesian(xlim=c(0,300),ylim=c(0,300))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.2))+
   labs(x="Measured",y="Predicted")+
@@ -127,7 +127,7 @@ ggplot(perC_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.02),ylim=c(0,0.02))+
+  coord_cartesian(xlim=c(0,200),ylim=c(0,200))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.3))+
   labs(x="Measured",y="Predicted")+
@@ -144,7 +144,7 @@ ggplot(perN_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(0,0.00025),ylim=c(0,0.00025))+
+  coord_cartesian(xlim=c(0,2.5),ylim=c(0,2.5))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.3))+
   labs(x="Measured (g N/cm2)",y="Predicted (g N/cm2)")+
