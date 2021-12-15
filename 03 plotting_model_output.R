@@ -94,8 +94,8 @@ perN_area_lower<-min(all.perN_area,na.rm=T)-0.2
 all.LMA<-c(intact_jack_df_list$LMA$Measured,
            intact_jack_df_list$LMA$pred_mean,
            ground_jack_df_list$LMA$pred_mean)
-LMA_upper<-max(all.LMA,na.rm=T)+20
-LMA_lower<-min(all.LMA,na.rm=T)-20
+LMA_upper<-max(all.LMA,na.rm=T)+25
+LMA_lower<-min(all.LMA,na.rm=T)-25
 
 ####################################
 ## create plots
@@ -281,15 +281,15 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
 ################################
 ## arrange plots
 
-pdf("Manuscript/Fig2.pdf",height=12,width=9)
-(perC_intact_val_plot/perN_intact_val_plot/LMA_intact_val_plot)|
-  (perC_ground_val_plot/perN_ground_val_plot/LMA_ground_val_plot) +
+pdf("Manuscript/Fig2.pdf",height=8,width=8.5)
+(NDF_intact_val_plot/ADF_intact_val_plot)|
+  (NDF_ground_val_plot/ADF_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig3.pdf",height=8,width=8.5)
-(NDF_intact_val_plot/ADF_intact_val_plot)|
-  (NDF_ground_val_plot/ADF_ground_val_plot) +
+pdf("Manuscript/Fig3.pdf",height=12,width=9)
+(perC_intact_val_plot/perN_intact_val_plot/LMA_intact_val_plot)|
+  (perC_ground_val_plot/perN_ground_val_plot/LMA_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 

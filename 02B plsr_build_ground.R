@@ -350,7 +350,7 @@ decomp_chem$predNDF<-rowMeans(NDF_jack_pred_decomp)[match_ids_decomp]
 ADF_jack_pred_decomp<-apply.coefs(ADF_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$predADF<-rowMeans(ADF_jack_pred_decomp)[match_ids_decomp]
 
-ggplot(decomp_chem,aes(x=predN,y=perN/100))+
+ggplot(decomp_chem,aes(x=predN,y=perN))+
   geom_point(aes(color=species,shape=trt),size=2)+
   geom_smooth(method="lm",se=F,size=2,color="black")+
   geom_smooth(method="lm",se=F,aes(color=species))+
@@ -358,7 +358,7 @@ ggplot(decomp_chem,aes(x=predN,y=perN/100))+
   theme(text = element_text(size=20))+
   labs(x="Predicted N",y="Measured N")+
   scale_color_brewer(palette="Set2")+
-  coord_cartesian(xlim=c(0.003,0.016),ylim=c(0.003,0.016))
+  coord_cartesian(xlim=c(0.3,1.6),ylim=c(0.3,1.6))
 
 decay_rate<-read.csv("Senesced_JCB/Decomp/decay_rate.csv")
 levels(decay_rate$species)<-c("ACERU","ACESA","BETPA","PINBA",
