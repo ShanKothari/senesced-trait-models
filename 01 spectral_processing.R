@@ -3,7 +3,7 @@ library(caret)
 library(patchwork)
 library(vegan)
 library(rdist)
-setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
+setwd("C:/Users/querc/Dropbox/TraitModels2018/SenescencePaper/")
 
 #######################################
 ## read intact spectra
@@ -68,12 +68,16 @@ mean(unlist(mean_spec_dist)*180/pi)
 ## read fiber data
 fiber<-read.csv("FiberAnalysis/FiberSummary.csv")
 fiber<-fiber[-which(fiber$REDO %in% c("YES")),]
+fiber$solubles<-100-fiber$NDF
+fiber$hemicellulose<-fiber$NDF-fiber$ADF
 
-meta(intact_spec_agg)$NDF<-fiber$NDF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
+meta(intact_spec_agg)$solubles<-fiber$solubles[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
+meta(intact_spec_agg)$hemicellulose<-fiber$hemicellulose[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 meta(intact_spec_agg)$ADF<-fiber$ADF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 meta(intact_spec_agg)$FiberRun<-fiber$Run[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 
-meta(ground_spec_agg)$NDF<-fiber$NDF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
+meta(ground_spec_agg)$solubles<-fiber$solubles[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
+meta(ground_spec_agg)$hemicellulose<-fiber$hemicellulose[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 meta(ground_spec_agg)$ADF<-fiber$ADF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 meta(ground_spec_agg)$FiberRun<-fiber$Run[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 
@@ -99,7 +103,7 @@ LMAdata_broad$ID<-gsub(pattern = " ",replacement="",x = LMAdata_broad$ID)
 LMAdata_broad$LMA<-with(LMAdata_broad,weight/(size.per.hole.punch..cm.2.*number.of.discs))
 LMAdata_broad<-LMAdata_broad[,c("Plot","Species","Location","Number","LMA","ID")]
 
-## calculate area
+## calculate area for needleleafs
 LMAdata_needle<-read.csv("SLA/SLA_senesced_needleleaf_3_17_2020.csv")
 LMAdata_needle$area<-LMAdata_needle$LengthMm/10*LMAdata_needle$WidthMm/10
 LMAdata_needle$LengthMm<-NULL
