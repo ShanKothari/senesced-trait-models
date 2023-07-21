@@ -23,7 +23,7 @@ meta(intact_spec)$ID<-apply(meta(intact_spec),1,function(x) paste(x,collapse = "
 ## decimal rather than percent
 intact_spec<-intact_spec/100
 
-## sensor matching is imperfect
+## sensor matching is imperfect but better than nothing
 intact_spec_matched<-match_sensors(intact_spec, splice_at=c(983), fixed_sensor = 2, interpolate_wvl = 5)
 ## spline smoothing if desired
 ## here we'll only do it where the sensors overlap (970-1000 nm)
@@ -155,11 +155,15 @@ ground_spec_agg_test<-ground_spec_agg[test_sample,]
 intact_spec_agg_train<-intact_spec_agg[-which(names(intact_spec_agg) %in% names(ground_spec_agg_test)),]
 intact_spec_agg_test<-intact_spec_agg[which(names(intact_spec_agg) %in% names(ground_spec_agg_test)),]
 
+saveRDS(intact_spec_agg,"SavedResults/intact_spec_agg.rds")
 saveRDS(intact_spec_agg_train,"SavedResults/intact_spec_agg_train.rds")
 saveRDS(intact_spec_agg_test,"SavedResults/intact_spec_agg_test.rds")
+write.csv(as.data.frame(intact_spec_agg)[,-1],"SavedResults/intact_spec.csv",row.names = F)
 
+saveRDS(ground_spec_agg,"SavedResults/ground_spec_agg.rds")
 saveRDS(ground_spec_agg_train,"SavedResults/ground_spec_agg_train.rds")
 saveRDS(ground_spec_agg_test,"SavedResults/ground_spec_agg_test.rds")
+write.csv(as.data.frame(ground_spec_agg)[,-1],"SavedResults/ground_spec.csv",row.names = F)
 
 ####################################
 ## plot spectra
@@ -176,8 +180,10 @@ intact_spec_plot<-ggplot()+
                   ymin = as.matrix(intact_quantiles)[2,],
                   ymax = as.matrix(intact_quantiles)[4,]),
               alpha = 0.5,fill = "blue")+
-  geom_line(aes(x=400:2400,y=as.matrix(intact_quantiles)[3,]),size=1,color="black")+
-  geom_line(aes(x=400:2400,y=intact_CV),size=1,color="red")+
+  geom_line(aes(x=400:2400,y=as.matrix(intact_quantiles)[3,]),
+            linewidth=1,color="black")+
+  geom_line(aes(x=400:2400,y=intact_CV),
+            linewidth=1,color="red")+
   theme_bw()+
   theme(text = element_text(size=20),
         panel.grid.major = element_blank(),
@@ -201,8 +207,10 @@ ground_spec_plot<-ggplot()+
                   ymin = as.matrix(ground_quantiles)[2,],
                   ymax = as.matrix(ground_quantiles)[4,]),
               alpha = 0.5,fill = "blue")+
-  geom_line(aes(x=400:2400,y=as.matrix(ground_quantiles)[3,]),size=1,color="black")+
-  geom_line(aes(x=400:2400,y=ground_CV),size=1,color="red")+
+  geom_line(aes(x=400:2400,y=as.matrix(ground_quantiles)[3,]),
+            linewidth=1,color="black")+
+  geom_line(aes(x=400:2400,y=ground_CV),
+            linewidth=1,color="red")+
   theme_bw()+
   theme(text = element_text(size=20),
         panel.grid.major = element_blank(),
