@@ -24,12 +24,13 @@ meta(intact_spec)$ID<-apply(meta(intact_spec),1,function(x) paste(x,collapse = "
 intact_spec<-intact_spec/100
 
 ## sensor matching is imperfect
-intact_spec_matched<-match_sensors(intact_spec, splice_at=c(983), fixed_sensor = 2, interpolate_wvl = 5,
-                                   factor_range = c(0.5, 3))
+intact_spec_matched<-match_sensors(intact_spec, splice_at=c(983), fixed_sensor = 2, interpolate_wvl = 5)
 ## spline smoothing if desired
-intact_spec_matched<-smooth(intact_spec_matched)
+## here we'll only do it where the sensors overlap (970-1000 nm)
+intact_spec_smoothed<-intact_spec_matched
+intact_spec_smoothed[,970:1000]<-smooth_spline(intact_spec_smoothed[,970:1000])
 
-intact_spec_agg<-aggregate(intact_spec_matched,by=meta(intact_spec_matched)$ID,
+intact_spec_agg<-aggregate(intact_spec_smoothed,by=meta(intact_spec_matched)$ID,
                            FUN=try_keep_txt(mean))
 
 #######################################
@@ -55,12 +56,19 @@ setdiff(names(intact_spec_agg),names(ground_spec_agg))
 ############################################
 ## calculate mean spectral distance
 
+intact_spec_split<-split(x=data.frame(as.matrix(intact_spec_smoothed)),
+                         f=meta(intact_spec_smoothed)$ID)
+
+intact_mean_dist<-lapply(intact_spec_split,
+                       function(x) mean(rdist(x,metric="angular")))
+median(unlist(intact_mean_dist)*180/pi)
+
 ground_spec_split<-split(x=data.frame(as.matrix(ground_spec)),
                          f=meta(ground_spec)$ID)
 
-mean_spec_dist<-lapply(ground_spec_split,
+ground_mean_dist<-lapply(ground_spec_split,
                        function(x) mean(rdist(x,metric="angular")))
-mean(unlist(mean_spec_dist)*180/pi)
+median(unlist(ground_mean_dist)*180/pi)
 
 ############################################
 ## attach trait data
@@ -73,12 +81,12 @@ fiber$hemicellulose<-fiber$NDF-fiber$ADF
 
 meta(intact_spec_agg)$solubles<-fiber$solubles[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 meta(intact_spec_agg)$hemicellulose<-fiber$hemicellulose[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
-meta(intact_spec_agg)$ADF<-fiber$ADF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
+meta(intact_spec_agg)$recalcitrant<-fiber$ADF[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 meta(intact_spec_agg)$FiberRun<-fiber$Run[match(meta(intact_spec_agg)$ID,fiber$SampleName)]
 
 meta(ground_spec_agg)$solubles<-fiber$solubles[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 meta(ground_spec_agg)$hemicellulose<-fiber$hemicellulose[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
-meta(ground_spec_agg)$ADF<-fiber$ADF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
+meta(ground_spec_agg)$recalcitrant<-fiber$ADF[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 meta(ground_spec_agg)$FiberRun<-fiber$Run[match(meta(ground_spec_agg)$ID,fiber$SampleName)]
 
 ## elemental data
