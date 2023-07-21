@@ -61,7 +61,7 @@ ggplot(hemi_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(25,75),ylim=c(25,75))+
+  coord_cartesian(xlim=c(5,27),ylim=c(5,27))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.2))+
   labs(x="Measured",y="Predicted")+
@@ -442,6 +442,6 @@ intact_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   scale_y_continuous(expand = c(0, 0),
                      limits = c(0,max(perRMSE.long$value)*1.1))
 
-pdf("Manuscript/FigS1.pdf",height=8,width=8)
+pdf("Manuscript/FigS1.pdf",height=8,width=6)
 (intact_val_R2/intact_val_perRMSE)
 dev.off()
