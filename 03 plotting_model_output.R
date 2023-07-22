@@ -1,4 +1,4 @@
-setwd("C:/Users/kotha020/Dropbox/TraitModels2018/SenescencePaper/")
+setwd("C:/Users/querc/Dropbox/TraitModels2018/SenescencePaper/")
 library(ggplot2)
 library(patchwork)
 library(RColorBrewer)
@@ -319,9 +319,9 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
 ################################
 ## arrange plots
 
-pdf("Manuscript/Fig2.pdf",height=8,width=8.5)
-(hemi_intact_val_plot/recalc_intact_val_plot)|
-  (hemi_ground_val_plot/recalc_ground_val_plot) +
+pdf("Manuscript/Fig2.pdf",height=12,width=9)
+(sol_intact_val_plot/hemi_intact_val_plot/recalc_intact_val_plot)|
+  (sol_ground_val_plot/hemi_ground_val_plot/recalc_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
