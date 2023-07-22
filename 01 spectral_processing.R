@@ -103,7 +103,7 @@ meta(ground_spec_agg)$perC<-EAdata$C.percent[match(meta(ground_spec_agg)$ID,EAda
 meta(ground_spec_agg)$perN<-EAdata$N.percent[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]
 meta(ground_spec_agg)$EARun<-EAdata$Run[match(meta(ground_spec_agg)$ID,EAdata$SampleID)]
 
-## LMA data
+## calculate LMA for broadleafs in g/cm2
 LMAdata_broad<-read.csv("SLA/SLA_senesced_broadleaf_2_6_2020.csv")
 LMAdata_broad<-LMAdata_broad[-which(LMAdata_broad$Bad=="YES"),]
 LMAdata_broad$ID<-apply(LMAdata_broad[,c(1,3,2,4)],1,function(x) paste(x,collapse="_"))
@@ -111,7 +111,7 @@ LMAdata_broad$ID<-gsub(pattern = " ",replacement="",x = LMAdata_broad$ID)
 LMAdata_broad$LMA<-with(LMAdata_broad,weight/(size.per.hole.punch..cm.2.*number.of.discs))
 LMAdata_broad<-LMAdata_broad[,c("Plot","Species","Location","Number","LMA","ID")]
 
-## calculate area for needleleafs
+## calculate area for needleleafs in cm2
 LMAdata_needle<-read.csv("SLA/SLA_senesced_needleleaf_3_17_2020.csv")
 LMAdata_needle$area<-LMAdata_needle$LengthMm/10*LMAdata_needle$WidthMm/10
 LMAdata_needle$LengthMm<-NULL
@@ -119,7 +119,8 @@ LMAdata_needle$WidthMm<-NULL
 LMAdata_needle$SLA<-NULL
 LMAdata_needle$NeedleNumber<-NULL
 
-## aggregate and calculate LMA
+## aggregate masses and areas for a sample
+## then calculate LMA in g/cm2
 LMAdata_needle_agg<-aggregate(.~Plot*Species*Location*IndNumber,data=LMAdata_needle,FUN=sum)
 LMAdata_needle_agg$LMA<-LMAdata_needle_agg$MassG/LMAdata_needle_agg$area
 LMAdata_needle_agg$MassG<-NULL
@@ -129,6 +130,7 @@ colnames(LMAdata_needle_agg)<-c("Plot","Species","Location","Number","LMA","ID")
 
 LMAdata<-rbind(LMAdata_broad,LMAdata_needle_agg)
 
+## converting g/cm2 to g/m2
 meta(intact_spec_agg)$LMA<-LMAdata$LMA[match(meta(intact_spec_agg)$ID,LMAdata$ID)]*10000
 meta(intact_spec_agg)$perC_area<-with(meta(intact_spec_agg),perC*LMA)/100
 meta(intact_spec_agg)$perN_area<-with(meta(intact_spec_agg),perN*LMA)/100

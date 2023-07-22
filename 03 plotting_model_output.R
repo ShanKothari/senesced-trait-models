@@ -9,7 +9,7 @@ library(RColorBrewer)
 VIP_intact<-readRDS("SavedResults/VIP_intact.rds")
 VIP_ground<-readRDS("SavedResults/VIP_ground.rds")
 
-focal_palette=palette(brewer.pal(8,name="Set2")[c(3,4,5,6,8)])
+focal_palette=palette(brewer.pal(8,name="Set2")[c(1,3,4,5,6,8)])
 
 VIP_intact_long<-melt(VIP_intact,id.vars = "wavelength")
 VIP_ground_long<-melt(VIP_ground,id.vars = "wavelength")
@@ -133,8 +133,7 @@ hemi_intact_val_plot<-ggplot(intact_jack_df_list$hemi,
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
-  guides(color=F)+
-  ggtitle("Intact")
+  guides(color=F)
 
 recalc_intact_val_plot<-ggplot(intact_jack_df_list$recalc,
                             aes(y=Measured,x=pred_mean,color=Species))+
@@ -251,11 +250,10 @@ hemi_ground_val_plot<-ggplot(ground_jack_df_list$hemi,
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
-  guides(color=F)+
-  ggtitle("Ground")
+  guides(color=F)
 
 recalc_ground_val_plot<-ggplot(ground_jack_df_list$recalc,
-                            aes(y=Measured,x=pred_mean,color=Species))+
+                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
@@ -319,13 +317,13 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
 ################################
 ## arrange plots
 
-pdf("Manuscript/Fig2.pdf",height=12,width=9)
+pdf("Manuscript/Fig2.pdf",height=13,width=10)
 (sol_intact_val_plot/hemi_intact_val_plot/recalc_intact_val_plot)|
   (sol_ground_val_plot/hemi_ground_val_plot/recalc_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig3.pdf",height=12,width=9)
+pdf("Manuscript/Fig3.pdf",height=13,width=10)
 (perC_intact_val_plot/perN_intact_val_plot/LMA_intact_val_plot)|
   (perC_ground_val_plot/perN_ground_val_plot/LMA_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
