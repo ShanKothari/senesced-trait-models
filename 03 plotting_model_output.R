@@ -14,7 +14,9 @@ focal_palette=palette(brewer.pal(8,name="Set2")[c(3,4,5,6,8)])
 VIP_intact_long<-melt(VIP_intact,id.vars = "wavelength")
 VIP_ground_long<-melt(VIP_ground,id.vars = "wavelength")
 
-VIP_intact_plot<-ggplot(VIP_intact_long[VIP_intact_long$variable %in% c("NDF","ADF","perC","perN","LMA"),],
+VIP_vars<-c("sol","hemi","recalc","perC","perN","LMA")
+
+VIP_intact_plot<-ggplot(VIP_intact_long[VIP_intact_long$variable %in% VIP_vars,],
                              aes(x=wavelength,y=value,color=variable))+
   geom_line(size=1.25)+theme_bw()+
   theme(text=element_text(size=20),
@@ -55,17 +57,23 @@ ground_jack_df_list<-readRDS("SavedResults/ground_jack_df_list.rds")
 ####################################
 ## define plot boundaries
 
-all.NDF<-c(intact_jack_df_list$NDF$Measured,
-           intact_jack_df_list$NDF$pred_mean,
-           ground_jack_df_list$NDF$pred_mean)
-NDF_upper<-max(all.NDF,na.rm=T)+3
-NDF_lower<-min(all.NDF,na.rm=T)-3
+all.sol<-c(intact_jack_df_list$sol$Measured,
+            intact_jack_df_list$sol$pred_mean,
+            ground_jack_df_list$sol$pred_mean)
+sol_upper<-max(all.sol,na.rm=T)+3
+sol_lower<-min(all.sol,na.rm=T)-3
 
-all.ADF<-c(intact_jack_df_list$ADF$Measured,
-           intact_jack_df_list$ADF$pred_mean,
-           ground_jack_df_list$ADF$pred_mean)
-ADF_upper<-max(all.ADF,na.rm=T)+2
-ADF_lower<-min(all.ADF,na.rm=T)-2
+all.hemi<-c(intact_jack_df_list$hemi$Measured,
+           intact_jack_df_list$hemi$pred_mean,
+           ground_jack_df_list$hemi$pred_mean)
+hemi_upper<-max(all.hemi,na.rm=T)+1
+hemi_lower<-min(all.hemi,na.rm=T)-1
+
+all.recalc<-c(intact_jack_df_list$recalc$Measured,
+           intact_jack_df_list$recalc$pred_mean,
+           ground_jack_df_list$recalc$pred_mean)
+recalc_upper<-max(all.recalc,na.rm=T)+2
+recalc_lower<-min(all.recalc,na.rm=T)-2
 
 all.perN<-c(intact_jack_df_list$perN$Measured,
             intact_jack_df_list$perN$pred_mean,
@@ -100,31 +108,45 @@ LMA_lower<-min(all.LMA,na.rm=T)-25
 ####################################
 ## create plots
 
-NDF_intact_val_plot<-ggplot(intact_jack_df_list$NDF,
-                            aes(y=Measured,x=pred_mean,color=Species))+
+sol_intact_val_plot<-ggplot(intact_jack_df_list$sol,
+                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(NDF_lower,NDF_upper),ylim=c(NDF_lower,NDF_upper))+
+  coord_cartesian(xlim=c(sol_lower,sol_upper),ylim=c(sol_lower,sol_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y="Measured NDF (%)",x="Predicted NDF (%)")+
+  labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   guides(color=F)+
   ggtitle("Intact")
 
-ADF_intact_val_plot<-ggplot(intact_jack_df_list$ADF,
+hemi_intact_val_plot<-ggplot(intact_jack_df_list$hemi,
                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(ADF_lower,ADF_upper),c(ADF_lower,ADF_upper))+
+  coord_cartesian(xlim=c(hemi_lower,hemi_upper),ylim=c(hemi_lower,hemi_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
-  labs(y="Measured ADF (%)",x="Predicted ADF (%)")+
+  labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
+  guides(color=F)+
+  ggtitle("Intact")
+
+recalc_intact_val_plot<-ggplot(intact_jack_df_list$recalc,
+                            aes(y=Measured,x=pred_mean,color=Species))+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(recalc_lower,recalc_upper),c(recalc_lower,recalc_upper))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25))+
+  labs(y="Measured recalcalcitrants (%)",x="Predicted recalcitrants (%)")+
   guides(color=F)
 
 perC_intact_val_plot<-ggplot(intact_jack_df_list$perC,
@@ -200,35 +222,51 @@ LMA_intact_val_plot<-ggplot(intact_jack_df_list$LMA,
        x=expression("Predicted LMA (g/m"^2*")"))+
   guides(color=F)
 
-NDF_ground_val_plot<-ggplot(ground_jack_df_list$NDF,
-                            aes(y=Measured,x=pred_mean,color=Species))+
+sol_ground_val_plot<-ggplot(ground_jack_df_list$sol,
+                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(NDF_lower,NDF_upper),ylim=c(NDF_lower,NDF_upper))+
+  coord_cartesian(xlim=c(sol_lower,sol_upper),ylim=c(sol_lower,sol_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
-  labs(y="Measured NDF (%)",x="Predicted NDF (%)")+
+  labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   guides(color=F)+
   ggtitle("Ground")
 
-ADF_ground_val_plot<-ggplot(ground_jack_df_list$ADF,
+hemi_ground_val_plot<-ggplot(ground_jack_df_list$hemi,
                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(ADF_lower,ADF_upper),ylim=c(ADF_lower,ADF_upper))+
+  coord_cartesian(xlim=c(hemi_lower,hemi_upper),ylim=c(hemi_lower,hemi_upper))+
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
-  labs(y="Measured ADF (%)",x="Predicted ADF (%)")
+  labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
+  guides(color=F)+
+  ggtitle("Ground")
+
+recalc_ground_val_plot<-ggplot(ground_jack_df_list$recalc,
+                            aes(y=Measured,x=pred_mean,color=Species))+
+  theme_bw()+
+  geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
+                 color="darkslategrey",alpha=0.7)+
+  geom_point(size=2)+geom_smooth(method="lm",se=F)+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  coord_cartesian(xlim=c(recalc_lower,recalc_upper),ylim=c(recalc_lower,recalc_upper))+
+  theme(text = element_text(size=20),
+        legend.position = c(0.8, 0.25),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  labs(y="Measured recalcitrants (%)",x="Predicted recalcitrants (%)")
 
 perC_ground_val_plot<-ggplot(ground_jack_df_list$perC,
                              aes(y=Measured,x=pred_mean,color=Species))+
@@ -282,8 +320,8 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
 ## arrange plots
 
 pdf("Manuscript/Fig2.pdf",height=8,width=8.5)
-(NDF_intact_val_plot/ADF_intact_val_plot)|
-  (NDF_ground_val_plot/ADF_ground_val_plot) +
+(hemi_intact_val_plot/recalc_intact_val_plot)|
+  (hemi_ground_val_plot/recalc_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
