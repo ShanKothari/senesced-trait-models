@@ -167,7 +167,7 @@ recalc_jack_stats<-list()
 perC_jack_stats<-list()
 perN_jack_stats<-list()
 LMA_jack_stats<-list()
-nreps<-100
+nreps<-200
 
 for(i in 1:nreps){
   print(i)
@@ -322,6 +322,12 @@ ground_jack_df_list<-list(LMA=LMA_jack_df,
                           recalc=recalc_jack_df)
 saveRDS(ground_jack_df_list,"SavedResults/ground_jack_df_list.rds")
 
+summ<-data.frame(ncomp=unlist(lapply(ground_jack_df_list,function(x) x$ncomp[1])),
+                 r2=round(unlist(lapply(ground_jack_df_list,function(x) summary(lm(Measured~pred_mean,data=x))$r.squared)),3),
+                 rmse=signif(unlist(lapply(ground_jack_df_list,function(x) RMSD(x$Measured,x$pred_mean))),3),
+                 perrmse=signif(unlist(lapply(ground_jack_df_list,function(x) percentRMSD(x$Measured,x$pred_mean,0.025,0.975)))*100,3))
+write.csv(summ,"SavedResults/stat_summary.csv")
+
 ############################################
 ## violin plots
 
@@ -358,7 +364,7 @@ ground_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   scale_y_continuous(expand = c(0, 0),
                      limits = c(0,max(perRMSE.long$value)*1.1))
 
-pdf("Manuscript/FigS2.pdf",height=8,width=6)
+pdf("Manuscript/FigS2.pdf",height=8,width=4.5)
 (ground_val_R2/ground_val_perRMSE)
 dev.off()
 
@@ -368,17 +374,15 @@ dev.off()
 source("Decomp/process_decomp.R")
 decomp_chem<-read.csv("Decomp/stoich_leaves.csv")
 colnames(decomp_chem)<-c("site","habitat","trt","species","perN","perC",
-                         "solubles","NDF","hemi","recalc","cellulose","ADL")
+                         "sol","NDF","hemi","recalc","cellulose","ADL")
 decomp_chem$habitat<-toupper(decomp_chem$habitat)
 decomp_chem$trt<-toupper(decomp_chem$trt)
 decomp_chem$species<-toupper(decomp_chem$species)
 decomp_chem$full_id<-apply(decomp_chem[,1:4],1,paste,collapse="_")
 match_ids_decomp<-match(decomp_chem$full_id,meta(decomp_agg)$full_id)
 
-# N_decomp_predict<-predict(perN_ground,
-#                           ncomp=ncomp_perN_ground,
-#                           newdata=as.matrix(decomp_agg[,400:2500]))
-# decomp_chem$predN<-N_decomp_predict[match_ids_decomp]
+decomp_chem$recalc_N<-decomp_chem$recalc/decomp_chem$perN
+decomp_chem$ADL_N<-decomp_chem$ADL/decomp_chem$perN
 
 perC_jack_pred_decomp<-apply.coefs(perC_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$predC<-rowMeans(perC_jack_pred_decomp)[match_ids_decomp]
@@ -403,9 +407,43 @@ ggplot(decomp_chem,aes(x=predN,y=perN))+
   theme(text = element_text(size=20))+
   labs(x="Predicted N",y="Measured N")+
   scale_color_brewer(palette="Set2")+
-  coord_cartesian(xlim=c(0.3,1.6),ylim=c(0.3,1.6))
+  coord_cartesian(xlim=c(0.2,1.6),ylim=c(0.2,1.6))
 
-decay_rate<-read.csv("Senesced_JCB/Decomp/decay_rate.csv")
+ggplot(decomp_chem,aes(x=pred_sol,y=sol))+
+  geom_point(aes(color=species,shape=trt),size=2)+
+  geom_smooth(method="lm",se=F,size=2,color="black")+
+  geom_smooth(method="lm",se=F,aes(color=species))+
+  geom_abline(intercept = 0,slope=1,linetype="dashed")+theme_bw()+
+  theme(text = element_text(size=20))+
+  labs(x="Predicted solubles",y="Measured solubles")+
+  scale_color_brewer(palette="Set2")+
+  coord_cartesian(xlim=c(10,70),ylim=c(10,70))
+
+ggplot(decomp_chem,aes(x=pred_recalc,y=recalc))+
+  geom_point(aes(color=species,shape=trt),size=2)+
+  geom_smooth(method="lm",se=F,size=2,color="black")+
+  geom_smooth(method="lm",se=F,aes(color=species))+
+  geom_abline(intercept = 0,slope=1,linetype="dashed")+theme_bw()+
+  theme(text = element_text(size=20))+
+  labs(x="Predicted recalcitrant",y="Measured recalcitrant")+
+  scale_color_brewer(palette="Set2")+
+  coord_cartesian(xlim=c(18,65),ylim=c(18,65))
+
+decay_rate<-read.csv("Decomp/decay_rate.csv")
+decay_rate$species<-as.factor(decay_rate$species)
+decay_rate$tissue_cond<-as.factor(decay_rate$tissue_cond)
+
 levels(decay_rate$species)<-c("ACERU","ACESA","BETPA","PINBA",
                               "PINST","POPTR","QUEMA","QUERU")
-decay_rate$full_id<-apply(decay_rate[,c(1,2,4,3)])
+levels(decay_rate$tissue_cond)<-c("AMB","WARM")
+decay_rate$tissue_cond[is.na(decay_rate$tissue_cond)]<-"AMB"
+
+decay_rate$full_id<-toupper(apply(decay_rate[,c(1,2,4,3)],1,paste,collapse="_"))
+
+decomp_match<-match(decomp_chem$full_id,decay_rate$full_id)
+decomp_chem$negexp_decay<-decay_rate$steady_state_Neg.exp[decomp_match]
+
+ggplot(data=decomp_chem,aes(x=perN,y=negexp_decay,
+                            color=trt,shape=habitat))+
+  geom_point()+
+  geom_smooth(method="lm")

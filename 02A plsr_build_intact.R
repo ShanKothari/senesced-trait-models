@@ -202,7 +202,7 @@ perN_jack_stats<-list()
 perC_area_jack_stats<-list()
 perN_area_jack_stats<-list()
 LMA_jack_stats<-list()
-nreps<-100
+nreps<-200
 
 for(i in 1:nreps){
   print(i)
@@ -400,6 +400,12 @@ intact_jack_df_list<-list(LMA=LMA_jack_df,
                           perC_area=perC_area_jack_df,
                           perN_area=perN_area_jack_df)
 saveRDS(intact_jack_df_list,"SavedResults/intact_jack_df_list.rds")
+
+summ<-data.frame(ncomp=unlist(lapply(intact_jack_df_list,function(x) x$ncomp[1])),
+                 r2=round(unlist(lapply(intact_jack_df_list,function(x) summary(lm(Measured~pred_mean,data=x))$r.squared)),3),
+                 rmse=signif(unlist(lapply(intact_jack_df_list,function(x) RMSD(x$Measured,x$pred_mean))),3),
+                 perrmse=signif(unlist(lapply(intact_jack_df_list,function(x) percentRMSD(x$Measured,x$pred_mean,0.025,0.975)))*100,3))
+write.csv(summ,"SavedResults/stat_summary.csv")
 
 ############################################
 ## violin plots
