@@ -14,10 +14,11 @@ focal_palette=palette(brewer.pal(8,name="Set2")[c(1,3,4,5,6,8)])
 VIP_intact_long<-melt(VIP_intact,id.vars = "wavelength")
 VIP_ground_long<-melt(VIP_ground,id.vars = "wavelength")
 
-VIP_vars<-c("sol","hemi","recalc","perC","perN","LMA")
+levels(VIP_intact_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
+levels(VIP_ground_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
 
-VIP_intact_plot<-ggplot(VIP_intact_long[VIP_intact_long$variable %in% VIP_vars,],
-                             aes(x=wavelength,y=value,color=variable))+
+VIP_intact_plot<-ggplot(VIP_intact_long,
+                        aes(x=wavelength,y=value,color=variable))+
   geom_line(size=1.25)+theme_bw()+
   theme(text=element_text(size=20),
         axis.title.x = element_blank(),

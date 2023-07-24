@@ -334,8 +334,8 @@ write.csv(summ,"SavedResults/stat_summary.csv")
 R2.df<-data.frame(sol=unlist(lapply(sol_jack_stats,function(x) x[["R2"]])),
                   hemi=unlist(lapply(hemi_jack_stats,function(x) x[["R2"]])),
                   recalc=unlist(lapply(recalc_jack_stats,function(x) x[["R2"]])),
-                  perC=unlist(lapply(perC_jack_stats,function(x) x[["R2"]])),
-                  perN=unlist(lapply(perN_jack_stats,function(x) x[["R2"]])),
+                  Cmass=unlist(lapply(perC_jack_stats,function(x) x[["R2"]])),
+                  Nmass=unlist(lapply(perN_jack_stats,function(x) x[["R2"]])),
                   LMA=unlist(lapply(LMA_jack_stats,function(x) x[["R2"]])))
 
 R2.long<-melt(R2.df)
@@ -351,8 +351,8 @@ ground_val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
 perRMSE.df<-data.frame(sol=unlist(lapply(sol_jack_stats,function(x) 100*x[["perRMSE"]])),
                        hemi=unlist(lapply(hemi_jack_stats,function(x) 100*x[["perRMSE"]])),
                        recalc=unlist(lapply(recalc_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       perC=unlist(lapply(perC_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       perN=unlist(lapply(perN_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Cmass=unlist(lapply(perC_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Nmass=unlist(lapply(perN_jack_stats,function(x) 100*x[["perRMSE"]])),
                        LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["perRMSE"]])))
 
 perRMSE.long<-melt(perRMSE.df)
