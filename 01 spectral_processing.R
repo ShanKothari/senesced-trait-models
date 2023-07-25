@@ -133,11 +133,11 @@ LMAdata<-rbind(LMAdata_broad,LMAdata_needle_agg)
 ## converting g/cm2 to g/m2
 meta(intact_spec_agg)$LMA<-LMAdata$LMA[match(meta(intact_spec_agg)$ID,LMAdata$ID)]*10000
 meta(intact_spec_agg)$Carea<-with(meta(intact_spec_agg),Cmass*LMA)/100
-meta(intact_spec_agg)$Nmass_area<-with(meta(intact_spec_agg),Nmass*LMA)/100
+meta(intact_spec_agg)$Narea<-with(meta(intact_spec_agg),Nmass*LMA)/100
 
 meta(ground_spec_agg)$LMA<-LMAdata$LMA[match(meta(ground_spec_agg)$ID,LMAdata$ID)]*10000
 meta(ground_spec_agg)$Carea<-with(meta(ground_spec_agg),Cmass*LMA)/100
-meta(ground_spec_agg)$Nmass_area<-with(meta(ground_spec_agg),Nmass*LMA)/100
+meta(ground_spec_agg)$Narea<-with(meta(ground_spec_agg),Nmass*LMA)/100
 
 ####################################
 ## divide training and testing
