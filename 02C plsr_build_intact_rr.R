@@ -429,6 +429,6 @@ VIP_intact_rr_plot<-ggplot(VIP_intact_rr_long,
   scale_x_continuous(expand = c(0, 0),limits=c(1290,2430))+
   ylim(c(0,2))
 
-pdf("Manuscript/FigS1.pdf",height=5,width=7)
+pdf("Manuscript/FigS3.pdf",height=5,width=7)
 VIP_intact_rr_plot
 dev.off()

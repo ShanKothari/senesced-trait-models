@@ -448,6 +448,6 @@ intact_val_perRMSE<-ggplot(perRMSE.long,aes(y=value,x=variable))+
   scale_y_continuous(expand = c(0, 0),
                      limits = c(0,max(perRMSE.long$value)*1.1))
 
-pdf("Manuscript/FigS2.pdf",height=8,width=6)
+pdf("Manuscript/FigS1.pdf",height=8,width=6)
 (intact_val_R2/intact_val_perRMSE)
 dev.off()

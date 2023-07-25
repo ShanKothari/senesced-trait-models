@@ -41,7 +41,7 @@ VIP_ground_plot<-ggplot(VIP_ground_long,
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ylim(c(0,3))
 
-pdf("Manuscript/Fig2.pdf",height=8,width=7)
+pdf("Manuscript/Fig5.pdf",height=8,width=7)
 VIP_intact_plot/VIP_ground_plot+
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
@@ -318,19 +318,19 @@ LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
 ################################
 ## arrange plots
 
-pdf("Manuscript/Fig3.pdf",height=13,width=10)
+pdf("Manuscript/Fig2.pdf",height=13,width=10)
 (sol_intact_val_plot/hemi_intact_val_plot/recalc_intact_val_plot)|
   (sol_ground_val_plot/hemi_ground_val_plot/recalc_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig4.pdf",height=13,width=10)
+pdf("Manuscript/Fig3.pdf",height=13,width=10)
 (Cmass_intact_val_plot/Nmass_intact_val_plot/LMA_intact_val_plot)|
   (Cmass_ground_val_plot/Nmass_ground_val_plot/LMA_ground_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig5.pdf",height=8,width=5.5)
+pdf("Manuscript/Fig4.pdf",height=8,width=5.5)
 (Carea_intact_val_plot/Narea_intact_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
