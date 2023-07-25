@@ -21,14 +21,14 @@ hemi_ground<-plsr(meta(ground_spec_agg_train)$hemicellulose~as.matrix(ground_spe
             ncomp=30,method = "oscorespls",validation="CV",segments=10)
 recalc_ground<-plsr(meta(ground_spec_agg_train)$recalcitrant~as.matrix(ground_spec_agg_train),
             ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perC_ground<-plsr(meta(ground_spec_agg_train)$perC~as.matrix(ground_spec_agg_train),
+Cmass_ground<-plsr(meta(ground_spec_agg_train)$Cmass~as.matrix(ground_spec_agg_train),
            ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perN_ground<-plsr(meta(ground_spec_agg_train)$perN~as.matrix(ground_spec_agg_train),
+Nmass_ground<-plsr(meta(ground_spec_agg_train)$Nmass~as.matrix(ground_spec_agg_train),
            ncomp=30,method = "oscorespls",validation="CV",segments=10)
 LMA_ground<-plsr(meta(ground_spec_agg_train)$LMA~as.matrix(ground_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
 
-# recalc_N_ratio_ground<-plsr(meta(ground_spec_agg_train)$recalcitrant/meta(ground_spec_agg_train)$perN~as.matrix(ground_spec_agg_train),
+# recalc_N_ratio_ground<-plsr(meta(ground_spec_agg_train)$recalcitrant/meta(ground_spec_agg_train)$Nmass~as.matrix(ground_spec_agg_train),
 #            ncomp=30,validation="LOO")
 
 ############################################
@@ -86,14 +86,14 @@ ggplot(recalc_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   labs(x="Measured",y="Predicted")+
   ggtitle("Predicting % recalcitrant from ground-leaf spectra")+guides(color=F)
 
-ncomp_perC_ground <- selectNcomp(perC_ground, method = "onesigma", plot = FALSE)
-perC_ground_valid <- which(!is.na(meta(ground_spec_agg_train)$perC))
-perC_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[perC_ground_valid],
-                              Species=meta(ground_spec_agg_train)$sp[perC_ground_valid],
-                              Run=meta(ground_spec_agg_train)$EARun[perC_ground_valid],
-                              Measured=meta(ground_spec_agg_train)$perC[perC_ground_valid],
-                              val_pred=perC_ground$validation$pred[,,ncomp_perC_ground])
-ggplot(perC_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
+ncomp_Cmass_ground <- selectNcomp(Cmass_ground, method = "onesigma", plot = FALSE)
+Cmass_ground_valid <- which(!is.na(meta(ground_spec_agg_train)$Cmass))
+Cmass_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[Cmass_ground_valid],
+                              Species=meta(ground_spec_agg_train)$sp[Cmass_ground_valid],
+                              Run=meta(ground_spec_agg_train)$EARun[Cmass_ground_valid],
+                              Measured=meta(ground_spec_agg_train)$Cmass[Cmass_ground_valid],
+                              val_pred=Cmass_ground$validation$pred[,,ncomp_Cmass_ground])
+ggplot(Cmass_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -103,14 +103,14 @@ ggplot(perC_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   labs(x="Measured",y="Predicted")+
   ggtitle("Predicting %C from ground-leaf spectra") #+guides(color=F)
 
-ncomp_perN_ground <- selectNcomp(perN_ground, method = "onesigma", plot = FALSE)
-perN_ground_valid <- which(!is.na(meta(ground_spec_agg_train)$perN))
-perN_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[perN_ground_valid],
-                             Species=meta(ground_spec_agg_train)$sp[perN_ground_valid],
-                             Run=meta(ground_spec_agg_train)$EARun[perN_ground_valid],
-                             Measured=meta(ground_spec_agg_train)$perN[perN_ground_valid],
-                             val_pred=perN_ground$validation$pred[,,ncomp_perN_ground])
-ggplot(perN_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
+ncomp_Nmass_ground <- selectNcomp(Nmass_ground, method = "onesigma", plot = FALSE)
+Nmass_ground_valid <- which(!is.na(meta(ground_spec_agg_train)$Nmass))
+Nmass_ground_pred<-data.frame(ID=meta(ground_spec_agg_train)$ID[Nmass_ground_valid],
+                             Species=meta(ground_spec_agg_train)$sp[Nmass_ground_valid],
+                             Run=meta(ground_spec_agg_train)$EARun[Nmass_ground_valid],
+                             Measured=meta(ground_spec_agg_train)$Nmass[Nmass_ground_valid],
+                             val_pred=Nmass_ground$validation$pred[,,ncomp_Nmass_ground])
+ggplot(Nmass_ground_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -145,8 +145,8 @@ source("VIP.R")
 VIP_ground<-data.frame(sol=VIP(sol_ground)[ncomp_sol_ground,],
                        hemi=VIP(hemi_ground)[ncomp_hemi_ground,],
                        recalc=VIP(recalc_ground)[ncomp_recalc_ground,],
-                       perC=VIP(perC_ground)[ncomp_perC_ground,],
-                       perN=VIP(perN_ground)[ncomp_perN_ground,],
+                       Cmass=VIP(Cmass_ground)[ncomp_Cmass_ground,],
+                       Nmass=VIP(Nmass_ground)[ncomp_Nmass_ground,],
                        LMA=VIP(LMA_ground)[ncomp_LMA_ground,],
                        wavelength=400:2400)
 saveRDS(VIP_ground,"SavedResults/VIP_ground.rds")
@@ -157,15 +157,15 @@ saveRDS(VIP_ground,"SavedResults/VIP_ground.rds")
 sol_jack_coefs<-list()
 hemi_jack_coefs<-list()
 recalc_jack_coefs<-list()
-perC_jack_coefs<-list()
-perN_jack_coefs<-list()
+Cmass_jack_coefs<-list()
+Nmass_jack_coefs<-list()
 LMA_jack_coefs<-list()
 
 sol_jack_stats<-list()
 hemi_jack_stats<-list()
 recalc_jack_stats<-list()
-perC_jack_stats<-list()
-perN_jack_stats<-list()
+Cmass_jack_stats<-list()
+Nmass_jack_stats<-list()
 LMA_jack_stats<-list()
 nreps<-200
 
@@ -185,9 +185,9 @@ for(i in 1:nreps){
                    ncomp=30,method = "oscorespls",validation="none")
   recalc_ground_jack<-plsr(meta(calib_jack)$recalcitrant~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
-  perC_ground_jack<-plsr(meta(calib_jack)$perC~as.matrix(calib_jack),
+  Cmass_ground_jack<-plsr(meta(calib_jack)$Cmass~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
-  perN_ground_jack<-plsr(meta(calib_jack)$perN~as.matrix(calib_jack),
+  Nmass_ground_jack<-plsr(meta(calib_jack)$Nmass~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
   LMA_ground_jack<-plsr(meta(calib_jack)$LMA~as.matrix(calib_jack),
                          ncomp=30,method = "oscorespls",validation="none")
@@ -213,19 +213,19 @@ for(i in 1:nreps){
                          perRMSE=percentRMSD(meta(val_jack)$recalcitrant,recalc_jack_val_pred,0.025,0.975),
                          bias=mean(recalc_jack_val_pred,na.rm=T)-mean(meta(val_jack)$recalcitrant,na.rm=T))
   
-  perC_jack_val_pred<-as.vector(predict(perC_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_ground)[,,1])
-  perC_jack_val_fit<-lm(perC_jack_val_pred~meta(val_jack)$perC)
-  perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
-                          RMSE=RMSD(meta(val_jack)$perC,perC_jack_val_pred),
-                          perRMSE=percentRMSD(meta(val_jack)$perC,perC_jack_val_pred,0.025,0.975),
-                          bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
+  Cmass_jack_val_pred<-as.vector(predict(Cmass_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_Cmass_ground)[,,1])
+  Cmass_jack_val_fit<-lm(Cmass_jack_val_pred~meta(val_jack)$Cmass)
+  Cmass_jack_stats[[i]]<-c(R2=summary(Cmass_jack_val_fit)$r.squared,
+                          RMSE=RMSD(meta(val_jack)$Cmass,Cmass_jack_val_pred),
+                          perRMSE=percentRMSD(meta(val_jack)$Cmass,Cmass_jack_val_pred,0.025,0.975),
+                          bias=mean(Cmass_jack_val_pred,na.rm=T)-mean(meta(val_jack)$Cmass,na.rm=T))
   
-  perN_jack_val_pred<-as.vector(predict(perN_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_ground)[,,1])
-  perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
-  perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
-                          RMSE=RMSD(meta(val_jack)$perN,perN_jack_val_pred),
-                          perRMSE=percentRMSD(meta(val_jack)$perN,perN_jack_val_pred,0.025,0.975),
-                          bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
+  Nmass_jack_val_pred<-as.vector(predict(Nmass_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_Nmass_ground)[,,1])
+  Nmass_jack_val_fit<-lm(Nmass_jack_val_pred~meta(val_jack)$Nmass)
+  Nmass_jack_stats[[i]]<-c(R2=summary(Nmass_jack_val_fit)$r.squared,
+                          RMSE=RMSD(meta(val_jack)$Nmass,Nmass_jack_val_pred),
+                          perRMSE=percentRMSD(meta(val_jack)$Nmass,Nmass_jack_val_pred,0.025,0.975),
+                          bias=mean(Nmass_jack_val_pred,na.rm=T)-mean(meta(val_jack)$Nmass,na.rm=T))
   
   LMA_jack_val_pred<-as.vector(predict(LMA_ground_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_ground)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
@@ -237,8 +237,8 @@ for(i in 1:nreps){
   sol_jack_coefs[[i]]<-as.vector(coef(sol_ground_jack,ncomp=ncomp_sol_ground,intercept=TRUE))
   hemi_jack_coefs[[i]]<-as.vector(coef(hemi_ground_jack,ncomp=ncomp_hemi_ground,intercept=TRUE))
   recalc_jack_coefs[[i]]<-as.vector(coef(recalc_ground_jack,ncomp=ncomp_recalc_ground,intercept=TRUE))
-  perC_jack_coefs[[i]]<-as.vector(coef(perC_ground_jack,ncomp=ncomp_perC_ground,intercept=TRUE))
-  perN_jack_coefs[[i]]<-as.vector(coef(perN_ground_jack,ncomp=ncomp_perN_ground,intercept=TRUE))
+  Cmass_jack_coefs[[i]]<-as.vector(coef(Cmass_ground_jack,ncomp=ncomp_Cmass_ground,intercept=TRUE))
+  Nmass_jack_coefs[[i]]<-as.vector(coef(Nmass_ground_jack,ncomp=ncomp_Nmass_ground,intercept=TRUE))
   LMA_jack_coefs[[i]]<-as.vector(coef(LMA_ground_jack,ncomp=ncomp_LMA_ground,intercept=TRUE))
   
 }
@@ -273,23 +273,23 @@ recalc_jack_df<-data.frame(pred_mean=recalc_jack_stat[,1],
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
-perC_jack_pred<-apply.coefs(perC_jack_coefs,as.matrix(ground_spec_agg_test))
-perC_jack_stat<-t(apply(perC_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
-perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
-                         pred_low=perC_jack_stat[,2],
-                         pred_high=perC_jack_stat[,3],
-                         Measured=meta(ground_spec_agg_test)$perC,
-                         ncomp=ncomp_perC_ground,
+Cmass_jack_pred<-apply.coefs(Cmass_jack_coefs,as.matrix(ground_spec_agg_test))
+Cmass_jack_stat<-t(apply(Cmass_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Cmass_jack_df<-data.frame(pred_mean=Cmass_jack_stat[,1],
+                         pred_low=Cmass_jack_stat[,2],
+                         pred_high=Cmass_jack_stat[,3],
+                         Measured=meta(ground_spec_agg_test)$Cmass,
+                         ncomp=ncomp_Cmass_ground,
                          Species=meta(ground_spec_agg_test)$sp,
                          ID=meta(ground_spec_agg_test)$ID)
 
-perN_jack_pred<-apply.coefs(perN_jack_coefs,as.matrix(ground_spec_agg_test))
-perN_jack_stat<-t(apply(perN_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
-perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
-                        pred_low=perN_jack_stat[,2],
-                        pred_high=perN_jack_stat[,3],
-                        Measured=meta(ground_spec_agg_test)$perN,
-                        ncomp=ncomp_perN_ground,
+Nmass_jack_pred<-apply.coefs(Nmass_jack_coefs,as.matrix(ground_spec_agg_test))
+Nmass_jack_stat<-t(apply(Nmass_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Nmass_jack_df<-data.frame(pred_mean=Nmass_jack_stat[,1],
+                        pred_low=Nmass_jack_stat[,2],
+                        pred_high=Nmass_jack_stat[,3],
+                        Measured=meta(ground_spec_agg_test)$Nmass,
+                        ncomp=ncomp_Nmass_ground,
                         Species=meta(ground_spec_agg_test)$sp,
                         ID=meta(ground_spec_agg_test)$ID)
 
@@ -307,16 +307,16 @@ LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
 ## save jackknife output
 
 ground_jack_coef_list<-list(LMA=LMA_jack_coefs,
-                            perC=perC_jack_coefs,
-                            perN=perN_jack_coefs,
+                            Cmass=Cmass_jack_coefs,
+                            Nmass=Nmass_jack_coefs,
                             sol=sol_jack_coefs,
                             hemi=hemi_jack_coefs,
                             recalc=recalc_jack_coefs)
 saveRDS(ground_jack_coef_list,"SavedResults/ground_jack_coefs_list.rds")
 
 ground_jack_df_list<-list(LMA=LMA_jack_df,
-                          perC=perC_jack_df,
-                          perN=perN_jack_df,
+                          Cmass=Cmass_jack_df,
+                          Nmass=Nmass_jack_df,
                           sol=sol_jack_df,
                           hemi=hemi_jack_df,
                           recalc=recalc_jack_df)
@@ -334,8 +334,8 @@ write.csv(summ,"SavedResults/stat_summary.csv")
 R2.df<-data.frame(sol=unlist(lapply(sol_jack_stats,function(x) x[["R2"]])),
                   hemi=unlist(lapply(hemi_jack_stats,function(x) x[["R2"]])),
                   recalc=unlist(lapply(recalc_jack_stats,function(x) x[["R2"]])),
-                  Cmass=unlist(lapply(perC_jack_stats,function(x) x[["R2"]])),
-                  Nmass=unlist(lapply(perN_jack_stats,function(x) x[["R2"]])),
+                  Cmass=unlist(lapply(Cmass_jack_stats,function(x) x[["R2"]])),
+                  Nmass=unlist(lapply(Nmass_jack_stats,function(x) x[["R2"]])),
                   LMA=unlist(lapply(LMA_jack_stats,function(x) x[["R2"]])))
 
 R2.long<-melt(R2.df)
@@ -351,8 +351,8 @@ ground_val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
 perRMSE.df<-data.frame(sol=unlist(lapply(sol_jack_stats,function(x) 100*x[["perRMSE"]])),
                        hemi=unlist(lapply(hemi_jack_stats,function(x) 100*x[["perRMSE"]])),
                        recalc=unlist(lapply(recalc_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       Cmass=unlist(lapply(perC_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       Nmass=unlist(lapply(perN_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Cmass=unlist(lapply(Cmass_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Nmass=unlist(lapply(Nmass_jack_stats,function(x) 100*x[["perRMSE"]])),
                        LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["perRMSE"]])))
 
 perRMSE.long<-melt(perRMSE.df)
@@ -373,7 +373,7 @@ dev.off()
 
 source("Decomp/process_decomp.R")
 decomp_chem<-read.csv("Decomp/stoich_leaves.csv")
-colnames(decomp_chem)<-c("site","habitat","trt","species","perN","perC",
+colnames(decomp_chem)<-c("site","habitat","trt","species","Nmass","Cmass",
                          "sol","NDF","hemi","recalc","cellulose","ADL")
 decomp_chem$habitat<-toupper(decomp_chem$habitat)
 decomp_chem$trt<-toupper(decomp_chem$trt)
@@ -381,14 +381,14 @@ decomp_chem$species<-toupper(decomp_chem$species)
 decomp_chem$full_id<-apply(decomp_chem[,1:4],1,paste,collapse="_")
 match_ids_decomp<-match(decomp_chem$full_id,meta(decomp_agg)$full_id)
 
-decomp_chem$recalc_N<-decomp_chem$recalc/decomp_chem$perN
-decomp_chem$ADL_N<-decomp_chem$ADL/decomp_chem$perN
+decomp_chem$recalc_N<-decomp_chem$recalc/decomp_chem$Nmass
+decomp_chem$ADL_N<-decomp_chem$ADL/decomp_chem$Nmass
 
-perC_jack_pred_decomp<-apply.coefs(perC_jack_coefs,as.matrix(decomp_agg[,400:2400]))
-decomp_chem$predC<-rowMeans(perC_jack_pred_decomp)[match_ids_decomp]
+Cmass_jack_pred_decomp<-apply.coefs(Cmass_jack_coefs,as.matrix(decomp_agg[,400:2400]))
+decomp_chem$predC<-rowMeans(Cmass_jack_pred_decomp)[match_ids_decomp]
 
-perN_jack_pred_decomp<-apply.coefs(perN_jack_coefs,as.matrix(decomp_agg[,400:2400]))
-decomp_chem$predN<-rowMeans(perN_jack_pred_decomp)[match_ids_decomp]
+Nmass_jack_pred_decomp<-apply.coefs(Nmass_jack_coefs,as.matrix(decomp_agg[,400:2400]))
+decomp_chem$predN<-rowMeans(Nmass_jack_pred_decomp)[match_ids_decomp]
 
 sol_jack_pred_decomp<-apply.coefs(sol_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$pred_sol<-rowMeans(sol_jack_pred_decomp)[match_ids_decomp]
@@ -399,7 +399,7 @@ decomp_chem$pred_hemi<-rowMeans(hemi_jack_pred_decomp)[match_ids_decomp]
 recalc_jack_pred_decomp<-apply.coefs(recalc_jack_coefs,as.matrix(decomp_agg[,400:2400]))
 decomp_chem$pred_recalc<-rowMeans(recalc_jack_pred_decomp)[match_ids_decomp]
 
-ggplot(decomp_chem,aes(x=predN,y=perN))+
+ggplot(decomp_chem,aes(x=predN,y=Nmass))+
   geom_point(aes(color=species,shape=trt),size=2)+
   geom_smooth(method="lm",se=F,size=2,color="black")+
   geom_smooth(method="lm",se=F,aes(color=species))+
@@ -443,7 +443,7 @@ decay_rate$full_id<-toupper(apply(decay_rate[,c(1,2,4,3)],1,paste,collapse="_"))
 decomp_match<-match(decomp_chem$full_id,decay_rate$full_id)
 decomp_chem$negexp_decay<-decay_rate$steady_state_Neg.exp[decomp_match]
 
-ggplot(data=decomp_chem,aes(x=perN,y=negexp_decay,
+ggplot(data=decomp_chem,aes(x=Nmass,y=negexp_decay,
                             color=trt,shape=habitat))+
   geom_point()+
   geom_smooth(method="lm")

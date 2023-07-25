@@ -22,15 +22,15 @@ hemi_intact<-plsr(meta(intact_spec_agg_train)$hemicellulose~as.matrix(intact_spe
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
 recalc_intact<-plsr(meta(intact_spec_agg_train)$recalcitrant~as.matrix(intact_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perN_intact<-plsr(meta(intact_spec_agg_train)$perN~as.matrix(intact_spec_agg_train),
+Nmass_intact<-plsr(meta(intact_spec_agg_train)$Nmass~as.matrix(intact_spec_agg_train),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perC_intact<-plsr(meta(intact_spec_agg_train)$perC~as.matrix(intact_spec_agg_train),
+Cmass_intact<-plsr(meta(intact_spec_agg_train)$Cmass~as.matrix(intact_spec_agg_train),
                   ncomp=30,method = "oscorespls",validation="CV",segments=10)
 LMA_intact<-plsr(meta(intact_spec_agg_train)$LMA~as.matrix(intact_spec_agg_train),
                  ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perN_area_intact<-plsr(meta(intact_spec_agg_train)$perN_area~as.matrix(intact_spec_agg_train),
+Narea_intact<-plsr(meta(intact_spec_agg_train)$Narea~as.matrix(intact_spec_agg_train),
                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
-perC_area_intact<-plsr(meta(intact_spec_agg_train)$perC_area~as.matrix(intact_spec_agg_train),
+Carea_intact<-plsr(meta(intact_spec_agg_train)$Carea~as.matrix(intact_spec_agg_train),
                        ncomp=30,method = "oscorespls",validation="CV",segments=10)
 
 ncomp_sol_intact <- selectNcomp(sol_intact, method = "onesigma", plot = FALSE)
@@ -84,14 +84,14 @@ ggplot(recalc_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   labs(x="Measured",y="Predicted")+
   ggtitle("Predicting % recalcitrants from intact-leaf spectra")+guides(color=F)
 
-ncomp_perC_intact <- selectNcomp(perC_intact, method = "onesigma", plot = FALSE)
-perC_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perC))
-perC_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perC_intact_valid],
-                             Species=meta(intact_spec_agg_train)$sp[perC_intact_valid],
-                             Run=meta(intact_spec_agg_train)$FiberRun[perC_intact_valid],
-                             Measured=meta(intact_spec_agg_train)$perC[perC_intact_valid],
-                             val_pred=perC_intact$validation$pred[,,ncomp_perC_intact])
-ggplot(perC_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
+ncomp_Cmass_intact <- selectNcomp(Cmass_intact, method = "onesigma", plot = FALSE)
+Cmass_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$Cmass))
+Cmass_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[Cmass_intact_valid],
+                             Species=meta(intact_spec_agg_train)$sp[Cmass_intact_valid],
+                             Run=meta(intact_spec_agg_train)$FiberRun[Cmass_intact_valid],
+                             Measured=meta(intact_spec_agg_train)$Cmass[Cmass_intact_valid],
+                             val_pred=Cmass_intact$validation$pred[,,ncomp_Cmass_intact])
+ggplot(Cmass_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -101,14 +101,14 @@ ggplot(perC_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   labs(x="Measured",y="Predicted")+
   ggtitle("Predicting %C from intact-leaf spectra")
 
-ncomp_perN_intact <- selectNcomp(perN_intact, method = "onesigma", plot = FALSE)
-perN_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perN))
-perN_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perN_intact_valid],
-                             Species=meta(intact_spec_agg_train)$sp[perN_intact_valid],
-                             Run=meta(intact_spec_agg_train)$FiberRun[perN_intact_valid],
-                             Measured=meta(intact_spec_agg_train)$perN[perN_intact_valid],
-                             val_pred=perN_intact$validation$pred[,,ncomp_perN_intact])
-ggplot(perN_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
+ncomp_Nmass_intact <- selectNcomp(Nmass_intact, method = "onesigma", plot = FALSE)
+Nmass_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$Nmass))
+Nmass_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[Nmass_intact_valid],
+                             Species=meta(intact_spec_agg_train)$sp[Nmass_intact_valid],
+                             Run=meta(intact_spec_agg_train)$FiberRun[Nmass_intact_valid],
+                             Measured=meta(intact_spec_agg_train)$Nmass[Nmass_intact_valid],
+                             val_pred=Nmass_intact$validation$pred[,,ncomp_Nmass_intact])
+ggplot(Nmass_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -135,14 +135,14 @@ ggplot(LMA_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   labs(x="Measured",y="Predicted")+
   ggtitle("Predicting LMA from intact-leaf spectra")+guides(color=F)
 
-ncomp_perC_area_intact <- selectNcomp(perC_area_intact, method = "onesigma", plot = FALSE)
-perC_area_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perC_area))
-perC_area_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perC_area_intact_valid],
-                                  Species=meta(intact_spec_agg_train)$sp[perC_area_intact_valid],
-                                  Run=meta(intact_spec_agg_train)$FiberRun[perC_area_intact_valid],
-                                  Measured=meta(intact_spec_agg_train)$perC_area[perC_area_intact_valid],
-                                  val_pred=perC_area_intact$validation$pred[,,ncomp_perC_area_intact])
-ggplot(perC_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
+ncomp_Carea_intact <- selectNcomp(Carea_intact, method = "onesigma", plot = FALSE)
+Carea_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$Carea))
+Carea_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[Carea_intact_valid],
+                                  Species=meta(intact_spec_agg_train)$sp[Carea_intact_valid],
+                                  Run=meta(intact_spec_agg_train)$FiberRun[Carea_intact_valid],
+                                  Measured=meta(intact_spec_agg_train)$Carea[Carea_intact_valid],
+                                  val_pred=Carea_intact$validation$pred[,,ncomp_Carea_intact])
+ggplot(Carea_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -152,14 +152,14 @@ ggplot(perC_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   labs(x="Measured",y="Predicted")+
   ggtitle("Predicting C per area from intact-leaf spectra")
 
-ncomp_perN_area_intact <- selectNcomp(perN_area_intact, method = "onesigma", plot = FALSE)
-perN_area_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$perN_area))
-perN_area_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[perN_area_intact_valid],
-                                  Species=meta(intact_spec_agg_train)$sp[perN_area_intact_valid],
-                                  Run=meta(intact_spec_agg_train)$FiberRun[perN_area_intact_valid],
-                                  Measured=meta(intact_spec_agg_train)$perN_area[perN_area_intact_valid],
-                                  val_pred=perN_area_intact$validation$pred[,,ncomp_perN_area_intact])
-ggplot(perN_area_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
+ncomp_Narea_intact <- selectNcomp(Narea_intact, method = "onesigma", plot = FALSE)
+Narea_intact_valid <- which(!is.na(meta(intact_spec_agg_train)$Narea))
+Narea_intact_pred<-data.frame(ID=meta(intact_spec_agg_train)$ID[Narea_intact_valid],
+                                  Species=meta(intact_spec_agg_train)$sp[Narea_intact_valid],
+                                  Run=meta(intact_spec_agg_train)$FiberRun[Narea_intact_valid],
+                                  Measured=meta(intact_spec_agg_train)$Narea[Narea_intact_valid],
+                                  val_pred=Narea_intact$validation$pred[,,ncomp_Narea_intact])
+ggplot(Narea_intact_pred,aes(x=Measured,y=val_pred,color=Species))+
   geom_point(size=2)+geom_smooth(method="lm",se=F)+
   theme_bw()+
   geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
@@ -176,8 +176,8 @@ source("VIP.R")
 VIP_intact<-data.frame(sol=VIP(sol_intact)[ncomp_sol_intact,],
                        hemi=VIP(hemi_intact)[ncomp_hemi_intact,],
                        recalc=VIP(recalc_intact)[ncomp_recalc_intact,],
-                       perC=VIP(perC_intact)[ncomp_perC_intact,],
-                       perN=VIP(perN_intact)[ncomp_perN_intact,],
+                       Cmass=VIP(Cmass_intact)[ncomp_Cmass_intact,],
+                       Nmass=VIP(Nmass_intact)[ncomp_Nmass_intact,],
                        LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
                        wavelength=400:2400)
 saveRDS(VIP_intact,"SavedResults/VIP_intact.rds")
@@ -188,19 +188,19 @@ saveRDS(VIP_intact,"SavedResults/VIP_intact.rds")
 sol_jack_coefs<-list()
 hemi_jack_coefs<-list()
 recalc_jack_coefs<-list()
-perC_jack_coefs<-list()
-perN_jack_coefs<-list()
-perC_area_jack_coefs<-list()
-perN_area_jack_coefs<-list()
+Cmass_jack_coefs<-list()
+Nmass_jack_coefs<-list()
+Carea_jack_coefs<-list()
+Narea_jack_coefs<-list()
 LMA_jack_coefs<-list()
 
 sol_jack_stats<-list()
 hemi_jack_stats<-list()
 recalc_jack_stats<-list()
-perC_jack_stats<-list()
-perN_jack_stats<-list()
-perC_area_jack_stats<-list()
-perN_area_jack_stats<-list()
+Cmass_jack_stats<-list()
+Nmass_jack_stats<-list()
+Carea_jack_stats<-list()
+Narea_jack_stats<-list()
 LMA_jack_stats<-list()
 nreps<-200
 
@@ -220,13 +220,13 @@ for(i in 1:nreps){
                         ncomp=30,method = "oscorespls",validation="none")
   recalc_intact_jack<-plsr(meta(calib_jack)$recalcitrant~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
-  perC_intact_jack<-plsr(meta(calib_jack)$perC~as.matrix(calib_jack),
+  Cmass_intact_jack<-plsr(meta(calib_jack)$Cmass~as.matrix(calib_jack),
                          ncomp=30,method = "oscorespls",validation="none")
-  perN_intact_jack<-plsr(meta(calib_jack)$perN~as.matrix(calib_jack),
+  Nmass_intact_jack<-plsr(meta(calib_jack)$Nmass~as.matrix(calib_jack),
                          ncomp=30,method = "oscorespls",validation="none")
-  perC_area_intact_jack<-plsr(meta(calib_jack)$perC_area~as.matrix(calib_jack),
+  Carea_intact_jack<-plsr(meta(calib_jack)$Carea~as.matrix(calib_jack),
                          ncomp=30,method = "oscorespls",validation="none")
-  perN_area_intact_jack<-plsr(meta(calib_jack)$perN_area~as.matrix(calib_jack),
+  Narea_intact_jack<-plsr(meta(calib_jack)$Narea~as.matrix(calib_jack),
                          ncomp=30,method = "oscorespls",validation="none")
   LMA_intact_jack<-plsr(meta(calib_jack)$LMA~as.matrix(calib_jack),
                         ncomp=30,method = "oscorespls",validation="none")
@@ -252,33 +252,33 @@ for(i in 1:nreps){
                          perRMSE=percentRMSD(meta(val_jack)$recalcitrant,recalc_jack_val_pred,0.025,0.975),
                          bias=mean(recalc_jack_val_pred,na.rm=T)-mean(meta(val_jack)$recalcitrant,na.rm=T))
   
-  perC_jack_val_pred<-as.vector(predict(perC_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_intact)[,,1])
-  perC_jack_val_fit<-lm(perC_jack_val_pred~meta(val_jack)$perC)
-  perC_jack_stats[[i]]<-c(R2=summary(perC_jack_val_fit)$r.squared,
-                          RMSE=RMSD(meta(val_jack)$perC,perC_jack_val_pred),
-                          perRMSE=percentRMSD(meta(val_jack)$perC,perC_jack_val_pred,0.025,0.975),
-                          bias=mean(perC_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC,na.rm=T))
+  Cmass_jack_val_pred<-as.vector(predict(Cmass_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_Cmass_intact)[,,1])
+  Cmass_jack_val_fit<-lm(Cmass_jack_val_pred~meta(val_jack)$Cmass)
+  Cmass_jack_stats[[i]]<-c(R2=summary(Cmass_jack_val_fit)$r.squared,
+                          RMSE=RMSD(meta(val_jack)$Cmass,Cmass_jack_val_pred),
+                          perRMSE=percentRMSD(meta(val_jack)$Cmass,Cmass_jack_val_pred,0.025,0.975),
+                          bias=mean(Cmass_jack_val_pred,na.rm=T)-mean(meta(val_jack)$Cmass,na.rm=T))
   
-  perN_jack_val_pred<-as.vector(predict(perN_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_intact)[,,1])
-  perN_jack_val_fit<-lm(perN_jack_val_pred~meta(val_jack)$perN)
-  perN_jack_stats[[i]]<-c(R2=summary(perN_jack_val_fit)$r.squared,
-                          RMSE=RMSD(meta(val_jack)$perN,perN_jack_val_pred),
-                          perRMSE=percentRMSD(meta(val_jack)$perN,perN_jack_val_pred,0.025,0.975),
-                          bias=mean(perN_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN,na.rm=T))
+  Nmass_jack_val_pred<-as.vector(predict(Nmass_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_Nmass_intact)[,,1])
+  Nmass_jack_val_fit<-lm(Nmass_jack_val_pred~meta(val_jack)$Nmass)
+  Nmass_jack_stats[[i]]<-c(R2=summary(Nmass_jack_val_fit)$r.squared,
+                          RMSE=RMSD(meta(val_jack)$Nmass,Nmass_jack_val_pred),
+                          perRMSE=percentRMSD(meta(val_jack)$Nmass,Nmass_jack_val_pred,0.025,0.975),
+                          bias=mean(Nmass_jack_val_pred,na.rm=T)-mean(meta(val_jack)$Nmass,na.rm=T))
   
-  perC_area_jack_val_pred<-as.vector(predict(perC_area_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perC_area_intact)[,,1])
-  perC_area_jack_val_fit<-lm(perC_area_jack_val_pred~meta(val_jack)$perC_area)
-  perC_area_jack_stats[[i]]<-c(R2=summary(perC_area_jack_val_fit)$r.squared,
-                               RMSE=RMSD(meta(val_jack)$perC_area,perC_area_jack_val_pred),
-                               perRMSE=percentRMSD(meta(val_jack)$perC_area,perC_area_jack_val_pred,0.025,0.975),
-                          bias=mean(perC_area_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perC_area,na.rm=T))
+  Carea_jack_val_pred<-as.vector(predict(Carea_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_Carea_intact)[,,1])
+  Carea_jack_val_fit<-lm(Carea_jack_val_pred~meta(val_jack)$Carea)
+  Carea_jack_stats[[i]]<-c(R2=summary(Carea_jack_val_fit)$r.squared,
+                               RMSE=RMSD(meta(val_jack)$Carea,Carea_jack_val_pred),
+                               perRMSE=percentRMSD(meta(val_jack)$Carea,Carea_jack_val_pred,0.025,0.975),
+                          bias=mean(Carea_jack_val_pred,na.rm=T)-mean(meta(val_jack)$Carea,na.rm=T))
   
-  perN_area_jack_val_pred<-as.vector(predict(perN_area_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_perN_area_intact)[,,1])
-  perN_area_jack_val_fit<-lm(perN_area_jack_val_pred~meta(val_jack)$perN_area)
-  perN_area_jack_stats[[i]]<-c(R2=summary(perN_area_jack_val_fit)$r.squared,
-                               RMSE=RMSD(meta(val_jack)$perN_area,perN_area_jack_val_pred),
-                               perRMSE=percentRMSD(meta(val_jack)$perN_area,perN_area_jack_val_pred,0.025,0.975),
-                          bias=mean(perN_area_jack_val_pred,na.rm=T)-mean(meta(val_jack)$perN_area,na.rm=T))
+  Narea_jack_val_pred<-as.vector(predict(Narea_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_Narea_intact)[,,1])
+  Narea_jack_val_fit<-lm(Narea_jack_val_pred~meta(val_jack)$Narea)
+  Narea_jack_stats[[i]]<-c(R2=summary(Narea_jack_val_fit)$r.squared,
+                               RMSE=RMSD(meta(val_jack)$Narea,Narea_jack_val_pred),
+                               perRMSE=percentRMSD(meta(val_jack)$Narea,Narea_jack_val_pred,0.025,0.975),
+                          bias=mean(Narea_jack_val_pred,na.rm=T)-mean(meta(val_jack)$Narea,na.rm=T))
   
   LMA_jack_val_pred<-as.vector(predict(LMA_intact_jack,newdata=as.matrix(val_jack),ncomp=ncomp_LMA_intact)[,,1])
   LMA_jack_val_fit<-lm(LMA_jack_val_pred~meta(val_jack)$LMA)
@@ -290,10 +290,10 @@ for(i in 1:nreps){
   sol_jack_coefs[[i]]<-as.vector(coef(sol_intact_jack,ncomp=ncomp_sol_intact,intercept=TRUE))
   hemi_jack_coefs[[i]]<-as.vector(coef(hemi_intact_jack,ncomp=ncomp_hemi_intact,intercept=TRUE))
   recalc_jack_coefs[[i]]<-as.vector(coef(recalc_intact_jack,ncomp=ncomp_recalc_intact,intercept=TRUE))
-  perC_jack_coefs[[i]]<-as.vector(coef(perC_intact_jack,ncomp=ncomp_perC_intact,intercept=TRUE))
-  perN_jack_coefs[[i]]<-as.vector(coef(perN_intact_jack,ncomp=ncomp_perN_intact,intercept=TRUE))
-  perC_area_jack_coefs[[i]]<-as.vector(coef(perC_area_intact_jack,ncomp=ncomp_perC_area_intact,intercept=TRUE))
-  perN_area_jack_coefs[[i]]<-as.vector(coef(perN_area_intact_jack,ncomp=ncomp_perN_area_intact,intercept=TRUE))
+  Cmass_jack_coefs[[i]]<-as.vector(coef(Cmass_intact_jack,ncomp=ncomp_Cmass_intact,intercept=TRUE))
+  Nmass_jack_coefs[[i]]<-as.vector(coef(Nmass_intact_jack,ncomp=ncomp_Nmass_intact,intercept=TRUE))
+  Carea_jack_coefs[[i]]<-as.vector(coef(Carea_intact_jack,ncomp=ncomp_Carea_intact,intercept=TRUE))
+  Narea_jack_coefs[[i]]<-as.vector(coef(Narea_intact_jack,ncomp=ncomp_Narea_intact,intercept=TRUE))
   LMA_jack_coefs[[i]]<-as.vector(coef(LMA_intact_jack,ncomp=ncomp_LMA_intact,intercept=TRUE))
   
 }
@@ -328,43 +328,43 @@ recalc_jack_df<-data.frame(pred_mean=recalc_jack_stat[,1],
                         Species=meta(intact_spec_agg_test)$sp,
                         ID=meta(intact_spec_agg_test)$ID)
 
-perC_jack_pred<-apply.coefs(perC_jack_coefs,as.matrix(intact_spec_agg_test))
-perC_jack_stat<-t(apply(perC_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
-perC_jack_df<-data.frame(pred_mean=perC_jack_stat[,1],
-                         pred_low=perC_jack_stat[,2],
-                         pred_high=perC_jack_stat[,3],
-                         Measured=meta(intact_spec_agg_test)$perC,
-                         ncomp=ncomp_perC_intact,
+Cmass_jack_pred<-apply.coefs(Cmass_jack_coefs,as.matrix(intact_spec_agg_test))
+Cmass_jack_stat<-t(apply(Cmass_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Cmass_jack_df<-data.frame(pred_mean=Cmass_jack_stat[,1],
+                         pred_low=Cmass_jack_stat[,2],
+                         pred_high=Cmass_jack_stat[,3],
+                         Measured=meta(intact_spec_agg_test)$Cmass,
+                         ncomp=ncomp_Cmass_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perN_jack_pred<-apply.coefs(perN_jack_coefs,as.matrix(intact_spec_agg_test))
-perN_jack_stat<-t(apply(perN_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
-perN_jack_df<-data.frame(pred_mean=perN_jack_stat[,1],
-                         pred_low=perN_jack_stat[,2],
-                         pred_high=perN_jack_stat[,3],
-                         Measured=meta(intact_spec_agg_test)$perN,
-                         ncomp=ncomp_perN_intact,
+Nmass_jack_pred<-apply.coefs(Nmass_jack_coefs,as.matrix(intact_spec_agg_test))
+Nmass_jack_stat<-t(apply(Nmass_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Nmass_jack_df<-data.frame(pred_mean=Nmass_jack_stat[,1],
+                         pred_low=Nmass_jack_stat[,2],
+                         pred_high=Nmass_jack_stat[,3],
+                         Measured=meta(intact_spec_agg_test)$Nmass,
+                         ncomp=ncomp_Nmass_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perC_area_jack_pred<-apply.coefs(perC_area_jack_coefs,as.matrix(intact_spec_agg_test))
-perC_area_jack_stat<-t(apply(perC_area_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
-perC_area_jack_df<-data.frame(pred_mean=perC_area_jack_stat[,1],
-                         pred_low=perC_area_jack_stat[,2],
-                         pred_high=perC_area_jack_stat[,3],
-                         Measured=meta(intact_spec_agg_test)$perC_area,
-                         ncomp=ncomp_perC_area_intact,
+Carea_jack_pred<-apply.coefs(Carea_jack_coefs,as.matrix(intact_spec_agg_test))
+Carea_jack_stat<-t(apply(Carea_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Carea_jack_df<-data.frame(pred_mean=Carea_jack_stat[,1],
+                         pred_low=Carea_jack_stat[,2],
+                         pred_high=Carea_jack_stat[,3],
+                         Measured=meta(intact_spec_agg_test)$Carea,
+                         ncomp=ncomp_Carea_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
-perN_area_jack_pred<-apply.coefs(perN_area_jack_coefs,as.matrix(intact_spec_agg_test))
-perN_area_jack_stat<-t(apply(perN_area_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
-perN_area_jack_df<-data.frame(pred_mean=perN_area_jack_stat[,1],
-                         pred_low=perN_area_jack_stat[,2],
-                         pred_high=perN_area_jack_stat[,3],
-                         Measured=meta(intact_spec_agg_test)$perN_area,
-                         ncomp=ncomp_perN_area_intact,
+Narea_jack_pred<-apply.coefs(Narea_jack_coefs,as.matrix(intact_spec_agg_test))
+Narea_jack_stat<-t(apply(Narea_jack_pred,1,function(obs) c(mean(obs),quantile(obs,probs=c(0.025,0.975)))))
+Narea_jack_df<-data.frame(pred_mean=Narea_jack_stat[,1],
+                         pred_low=Narea_jack_stat[,2],
+                         pred_high=Narea_jack_stat[,3],
+                         Measured=meta(intact_spec_agg_test)$Narea,
+                         ncomp=ncomp_Narea_intact,
                          Species=meta(intact_spec_agg_test)$sp,
                          ID=meta(intact_spec_agg_test)$ID)
 
@@ -382,23 +382,23 @@ LMA_jack_df<-data.frame(pred_mean=LMA_jack_stat[,1],
 ## save jackknife output
 
 intact_jack_coef_list<-list(LMA=LMA_jack_coefs,
-                            perC=perC_jack_coefs,
-                            perN=perN_jack_coefs,
+                            Cmass=Cmass_jack_coefs,
+                            Nmass=Nmass_jack_coefs,
                             sol=sol_jack_coefs,
                             hemi=hemi_jack_coefs,
                             recalc=recalc_jack_coefs,
-                            perC_area=perC_area_jack_coefs,
-                            perN_area=perN_area_jack_coefs)
+                            Carea=Carea_jack_coefs,
+                            Narea=Narea_jack_coefs)
 saveRDS(intact_jack_coef_list,"SavedResults/intact_jack_coefs_list.rds")
 
 intact_jack_df_list<-list(LMA=LMA_jack_df,
-                          perC=perC_jack_df,
-                          perN=perN_jack_df,
+                          Cmass=Cmass_jack_df,
+                          Nmass=Nmass_jack_df,
                           sol=sol_jack_df,
                           hemi=hemi_jack_df,
                           recalc=recalc_jack_df,
-                          perC_area=perC_area_jack_df,
-                          perN_area=perN_area_jack_df)
+                          Carea=Carea_jack_df,
+                          Narea=Narea_jack_df)
 saveRDS(intact_jack_df_list,"SavedResults/intact_jack_df_list.rds")
 
 summ<-data.frame(ncomp=unlist(lapply(intact_jack_df_list,function(x) x$ncomp[1])),
@@ -413,10 +413,10 @@ write.csv(summ,"SavedResults/stat_summary.csv")
 R2.df<-data.frame(sol=unlist(lapply(sol_jack_stats,function(x) x[["R2"]])),
                   hemi=unlist(lapply(hemi_jack_stats,function(x) x[["R2"]])),
                   recalc=unlist(lapply(recalc_jack_stats,function(x) x[["R2"]])),
-                  Cmass=unlist(lapply(perC_jack_stats,function(x) x[["R2"]])),
-                  Nmass=unlist(lapply(perN_jack_stats,function(x) x[["R2"]])),
-                  Carea=unlist(lapply(perC_area_jack_stats,function(x) x[["R2"]])),
-                  Narea=unlist(lapply(perN_area_jack_stats,function(x) x[["R2"]])),
+                  Cmass=unlist(lapply(Cmass_jack_stats,function(x) x[["R2"]])),
+                  Nmass=unlist(lapply(Nmass_jack_stats,function(x) x[["R2"]])),
+                  Carea=unlist(lapply(Carea_jack_stats,function(x) x[["R2"]])),
+                  Narea=unlist(lapply(Narea_jack_stats,function(x) x[["R2"]])),
                   LMA=unlist(lapply(LMA_jack_stats,function(x) x[["R2"]])))
 
 R2.long<-melt(R2.df)
@@ -433,10 +433,10 @@ intact_val_R2<-ggplot(R2.long,aes(y=value,x=variable))+
 perRMSE.df<-data.frame(sol=unlist(lapply(sol_jack_stats,function(x) 100*x[["perRMSE"]])),
                        hemi=unlist(lapply(hemi_jack_stats,function(x) 100*x[["perRMSE"]])),
                        recalc=unlist(lapply(recalc_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       Cmass=unlist(lapply(perC_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       Nmass=unlist(lapply(perN_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       Carea=unlist(lapply(perC_area_jack_stats,function(x) 100*x[["perRMSE"]])),
-                       Narea=unlist(lapply(perN_area_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Cmass=unlist(lapply(Cmass_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Nmass=unlist(lapply(Nmass_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Carea=unlist(lapply(Carea_jack_stats,function(x) 100*x[["perRMSE"]])),
+                       Narea=unlist(lapply(Narea_jack_stats,function(x) 100*x[["perRMSE"]])),
                        LMA=unlist(lapply(LMA_jack_stats,function(x) 100*x[["perRMSE"]])))
 
 perRMSE.long<-melt(perRMSE.df)
