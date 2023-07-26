@@ -183,7 +183,7 @@ VIP_intact<-data.frame(sol=VIP(sol_intact)[ncomp_sol_intact,],
                        Nmass=VIP(Nmass_intact)[ncomp_Nmass_intact,],
                        LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
                        wavelength=1300:2400)
-saveRDS(VIP_intact,"SavedResults/VIP_intact_rr.rds")
+saveRDS(VIP_intact,"SavedResults/VIP_intact_swir.rds")
 
 #######################################
 ## jackknife tests + prediction of validation data
@@ -392,7 +392,7 @@ intact_jack_coef_list<-list(LMA=LMA_jack_coefs,
                             recalc=recalc_jack_coefs,
                             Carea=Carea_jack_coefs,
                             Narea=Narea_jack_coefs)
-saveRDS(intact_jack_coef_list,"SavedResults/intact_jack_coefs_list_rr.rds")
+saveRDS(intact_jack_coef_list,"SavedResults/intact_jack_coefs_list_swir.rds")
 
 intact_jack_df_list<-list(LMA=LMA_jack_df,
                           Cmass=Cmass_jack_df,
@@ -402,7 +402,7 @@ intact_jack_df_list<-list(LMA=LMA_jack_df,
                           recalc=recalc_jack_df,
                           Carea=Carea_jack_df,
                           Narea=Narea_jack_df)
-saveRDS(intact_jack_df_list,"SavedResults/intact_jack_df_list_rr.rds")
+saveRDS(intact_jack_df_list,"SavedResults/intact_jack_df_list_swir.rds")
 
 summ<-data.frame(ncomp=unlist(lapply(intact_jack_df_list,function(x) x$ncomp[1])),
                  r2=round(unlist(lapply(intact_jack_df_list,function(x) summary(lm(Measured~pred_mean,data=x))$r.squared)),3),
@@ -415,20 +415,19 @@ write.csv(summ,"SavedResults/stat_summary.csv")
 
 focal_palette=palette(brewer.pal(8,name="Set2")[c(1,3,4,5,6,8)])
 
-VIP_intact_rr_long<-melt(VIP_intact,id.vars = "wavelength")
-levels(VIP_intact_rr_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
+VIP_intact_swir_long<-melt(VIP_intact,id.vars = "wavelength")
+levels(VIP_intact_swir_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
 
-VIP_intact_rr_plot<-ggplot(VIP_intact_rr_long,
+VIP_intact_swir_plot<-ggplot(VIP_intact_swir_long,
                            aes(x=wavelength,y=value,color=variable))+
   geom_line(size=1.25)+theme_bw()+
   theme(text=element_text(size=20))+
   labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
-  ggtitle("Intact")+
   scale_color_manual(values=focal_palette)+
   geom_hline(yintercept=0.8,linetype="dashed",size=2)+
   scale_x_continuous(expand = c(0, 0),limits=c(1290,2430))+
   ylim(c(0,2))
 
 pdf("Manuscript/FigS3.pdf",height=5,width=7)
-VIP_intact_rr_plot
+VIP_intact_swir_plot
 dev.off()
