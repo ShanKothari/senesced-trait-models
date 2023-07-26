@@ -190,8 +190,7 @@ Carea_intact_val_plot<-ggplot(intact_jack_df_list$Carea,
   theme(text = element_text(size=20),
         legend.position = c(0.8, 0.25))+
   labs(y=expression("Measured C"[area]*" (g/m"^2*")"),
-       x=expression("Predicted C"[area]*" (g/m"^2*")"))+
-  ggtitle("Intact")
+       x=expression("Predicted C"[area]*" (g/m"^2*")"))
 
 Narea_intact_val_plot<-ggplot(intact_jack_df_list$Narea,
                               aes(y=Measured,x=pred_mean,color=Species))+
@@ -330,7 +329,7 @@ pdf("Manuscript/Fig3.pdf",height=13,width=10)
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
 
-pdf("Manuscript/Fig4.pdf",height=8,width=5.5)
+pdf("Manuscript/Fig4.pdf",height=8,width=6)
 (Carea_intact_val_plot/Narea_intact_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
