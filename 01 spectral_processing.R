@@ -61,14 +61,14 @@ intact_spec_split<-split(x=data.frame(as.matrix(intact_spec_smoothed)),
 
 intact_mean_dist<-lapply(intact_spec_split,
                        function(x) mean(rdist(x,metric="angular")))
-median(unlist(intact_mean_dist)*180/pi)
+quantile(unlist(intact_mean_dist)*180/pi,probs=c(0.025,0.5,0.975))
 
 ground_spec_split<-split(x=data.frame(as.matrix(ground_spec)),
                          f=meta(ground_spec)$ID)
 
 ground_mean_dist<-lapply(ground_spec_split,
                        function(x) mean(rdist(x,metric="angular")))
-median(unlist(ground_mean_dist)*180/pi)
+quantile(unlist(ground_mean_dist)*180/pi,probs=c(0.025,0.5,0.975))
 
 ############################################
 ## attach trait data
