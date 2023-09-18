@@ -333,3 +333,22 @@ pdf("Manuscript/Fig4.pdf",height=8,width=6)
 (Carea_intact_val_plot/Narea_intact_val_plot) +
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()
+
+###########################################
+## output species mean measured and predicted traits
+
+my_merge <- function(df1, df2){                                # Create own merging function
+  merge(df1, df2, by = "Species")
+}
+
+intact_pred_summ<-lapply(intact_jack_df_list,function(trait_df){
+  aggregate(.~Species,FUN=function(x) signif(mean(x),digits = 3),
+            data=trait_df[,c("pred_mean","Measured","Species")])
+})
+
+intact_pred_summ_df<-Reduce(my_merge,intact_pred_summ)
+colnames(intact_pred_summ_df)<-c("Species",
+                                 paste(rep(names(intact_jack_df_list),each=2),
+                                       rep(c("Pred","Meas"),times=8),sep="_"))
+
+write.csv(intact_pred_summ_df,"SavedResults/intact_pred_summ_df.csv",row.names = F)
