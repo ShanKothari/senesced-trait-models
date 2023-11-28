@@ -2,6 +2,7 @@ setwd("C:/Users/querc/Dropbox/TraitModels2018/SenescencePaper/")
 library(ggplot2)
 library(patchwork)
 library(RColorBrewer)
+library(reshape2)
 
 ###################################
 ## VIP plotting
@@ -19,16 +20,19 @@ levels(VIP_ground_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
 
 VIP_intact_plot<-ggplot(VIP_intact_long,
                         aes(x=wavelength,y=value,color=variable))+
-  geom_line(size=1.25)+theme_bw()+
+  geom_line(linewidth=1.25)+theme_bw()+
   theme(text=element_text(size=20),
         axis.title.x = element_blank(),
         axis.text.x = element_blank())+
   labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
   ggtitle("Intact")+
-  scale_color_manual(values=focal_palette)+
+  scale_color_manual(values=focal_palette,
+                     labels=c("solubles","hemicellulose",
+                              "recalcitrants",expression(C[mass]),
+                              expression(N[mass]),"LMA"))+
   geom_hline(yintercept=0.8,linetype="dashed",size=2)+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  ylim(c(0,3))+guides(color=F)
+  ylim(c(0,3))+guides(color="none")
 
 VIP_ground_plot<-ggplot(VIP_ground_long,
                         aes(x=wavelength,y=value,color=variable))+
@@ -36,12 +40,15 @@ VIP_ground_plot<-ggplot(VIP_ground_long,
   theme(text=element_text(size=20))+
   labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
   ggtitle("Ground")+
-  scale_color_manual(values=focal_palette)+
+  scale_color_manual(values=focal_palette,
+                     labels=c("solubles","hemicellulose",
+                              "recalcitrants",expression(C[mass]),
+                              expression(N[mass]),"LMA"))+
   geom_hline(yintercept=0.8,linetype="dashed",size=2)+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ylim(c(0,3))
 
-pdf("Manuscript/Fig5.pdf",height=8,width=7)
+pdf("Manuscript/Fig5.pdf",height=8,width=8)
 VIP_intact_plot/VIP_ground_plot+
   plot_layout(guides="collect") & theme(legend.position = "right")
 dev.off()

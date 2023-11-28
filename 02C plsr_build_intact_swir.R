@@ -423,7 +423,10 @@ VIP_intact_swir_plot<-ggplot(VIP_intact_swir_long,
   geom_line(size=1.25)+theme_bw()+
   theme(text=element_text(size=20))+
   labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
-  scale_color_manual(values=focal_palette)+
+  scale_color_manual(values=focal_palette,
+                     labels=c("solubles","hemicellulose",
+                              "recalcitrants",expression(C[mass]),
+                              expression(N[mass]),"LMA"))+
   geom_hline(yintercept=0.8,linetype="dashed",size=2)+
   scale_x_continuous(expand = c(0, 0),limits=c(1290,2430))+
   ylim(c(0,2))
