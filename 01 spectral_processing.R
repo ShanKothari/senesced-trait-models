@@ -1,6 +1,7 @@
 library(spectrolab)
 library(caret)
 library(patchwork)
+library(ggpubr)
 library(vegan)
 library(rdist)
 setwd("C:/Users/querc/Dropbox/TraitModels2018/SenescencePaper/")
@@ -188,10 +189,7 @@ intact_spec_plot<-ggplot()+
             linewidth=1,color="red")+
   theme_bw()+
   theme(text = element_text(size=20),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.x = element_blank(),
-        axis.text.x = element_blank())+
+        panel.grid.minor = element_blank())+
   labs(x="Wavelength",y="Reflectance (or CV)")+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
@@ -215,13 +213,93 @@ ground_spec_plot<-ggplot()+
             linewidth=1,color="red")+
   theme_bw()+
   theme(text = element_text(size=20),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())+
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
   labs(x="Wavelength",y="Reflectance (or CV)")+
   scale_y_continuous(expand = c(0, 0),limits=c(0,1))+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ggtitle("Ground-leaf spectra")
 
-pdf("Manuscript/Fig1.pdf",height=8,width=6)
-intact_spec_plot/ground_spec_plot
+pdf("Manuscript/Fig1.pdf",height=4,width=10)
+intact_spec_plot+ground_spec_plot
+dev.off()
+
+###########################################
+## compare pigment indices to N content
+
+## Plant Senescence Reflectance Index
+## Merzlyak et al. 1999 Physiologia Plantarum
+meta(intact_spec_agg)$PSRI<-(intact_spec_agg[,678]-intact_spec_agg[,500])/intact_spec_agg[,750]
+meta(ground_spec_agg)$PSRI<-(ground_spec_agg[,678]-ground_spec_agg[,500])/ground_spec_agg[,750]
+
+## Red-edge chlorophyll index
+## Gitelson et al. 2009 Am J Bot
+meta(intact_spec_agg)$CIre<-rowMeans(as.matrix(intact_spec_agg[,760:800]))/rowMeans(as.matrix(intact_spec_agg[,690:710]))-1
+meta(ground_spec_agg)$CIre<-rowMeans(as.matrix(ground_spec_agg[,760:800]))/rowMeans(as.matrix(ground_spec_agg[,690:710]))-1
+
+intact_PSRI<-ggplot(meta(intact_spec_agg),
+                    aes(x=PSRI,y=Nmass,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20))+
+  guides(color="none")+
+  coord_cartesian(ylim=c(0.2,2.6))+
+  labs(x="Plant Senescence Reflectance Index",
+       y=expression(paste("N"[mass]," (%)")),
+       title="Intact-leaf spectra",
+       color="Species")
+
+ground_PSRI<-ggplot(meta(ground_spec_agg),
+                    aes(x=PSRI,y=Nmass,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  guides(color="none")+
+  coord_cartesian(ylim=c(0.2,2.6))+
+  labs(x="Plant Senescence Reflectance Index",
+       y=expression(paste("N"[mass]," (%)")),
+       title="Ground-leaf spectra",
+       color="Species")
+
+intact_CIre<-ggplot(meta(intact_spec_agg),
+                    aes(x=CIre,y=Nmass,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20))+
+  guides(color="none")+
+  coord_cartesian(ylim=c(0.2,2.6))+
+  labs(x="Red-Edge Chlorophyll Index",
+       y=expression(paste("N"[mass]," (%)")),
+       color="Species")
+
+ground_CIre<-ggplot(meta(ground_spec_agg),
+                    aes(x=CIre,y=Nmass,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  coord_cartesian(ylim=c(0.2,2.6))+
+  labs(x="Red-Edge Chlorophyll Index",
+       y=expression(paste("N"[mass]," (%)")),
+       color="Species")
+
+plot_compile_indices<-ggpubr::ggarrange(intact_PSRI,ground_PSRI,
+                                        intact_CIre,ground_CIre,
+                                        ncol=2,nrow=2,
+                                        common.legend=T,legend="right")
+
+
+pdf("Manuscript/FigXX.pdf")
+(intact_PSRI+ground_PSRI)/
+  (intact_CIre+ground_CIre) &
+  plot_layout(guides="collect") &
+  theme(legend.position = "bottom")
 dev.off()
