@@ -10,47 +10,70 @@ library(reshape2)
 VIP_intact<-readRDS("SavedResults/VIP_intact.rds")
 VIP_ground<-readRDS("SavedResults/VIP_ground.rds")
 
-focal_palette=palette(brewer.pal(8,name="Set2")[c(1,3,4,5,6,8)])
+focal_palette=palette(brewer.pal(8,name="Set2"))
 
 VIP_intact_long<-melt(VIP_intact,id.vars = "wavelength")
 VIP_ground_long<-melt(VIP_ground,id.vars = "wavelength")
 
-levels(VIP_intact_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
-levels(VIP_ground_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
+levels(VIP_intact_long$variable)<-c("sol","hemi","recalc","LMA",
+                                    "Cmass","Nmass","Carea","Narea")
+levels(VIP_ground_long$variable)<-c("sol","hemi","recalc","LMA",
+                                    "Cmass","Nmass")
 
-VIP_intact_plot<-ggplot(VIP_intact_long,
-                        aes(x=wavelength,y=value,color=variable))+
+plot_left<-c("sol","hemi","recalc","LMA")
+
+VIP_intact_long$side<-ifelse(VIP_intact_long$variable %in% plot_left,
+                             "left","right")
+VIP_ground_long$side<-ifelse(VIP_ground_long$variable %in% plot_left,
+                             "left","right")
+
+VIP_intact_plot_facet<-ggplot(VIP_intact_long,
+                         aes(x=wavelength,y=value,color=variable))+
   geom_line(linewidth=1.25)+theme_bw()+
   theme(text=element_text(size=20),
         axis.title.x = element_blank(),
-        axis.text.x = element_blank())+
+        axis.text.x = element_blank(),
+        strip.background = element_blank(),
+        strip.text.x = element_blank())+
   labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
   ggtitle("Intact")+
+  facet_wrap(~side)+
   scale_color_manual(values=focal_palette,
                      labels=c("solubles","hemicellulose",
-                              "recalcitrants",expression(C[mass]),
-                              expression(N[mass]),"LMA"))+
-  geom_hline(yintercept=0.8,linetype="dashed",size=2)+
-  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
-  ylim(c(0,3))+guides(color="none")
-
-VIP_ground_plot<-ggplot(VIP_ground_long,
-                        aes(x=wavelength,y=value,color=variable))+
-  geom_line(size=1.25)+theme_bw()+
-  theme(text=element_text(size=20))+
-  labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
-  ggtitle("Ground")+
-  scale_color_manual(values=focal_palette,
-                     labels=c("solubles","hemicellulose",
-                              "recalcitrants",expression(C[mass]),
-                              expression(N[mass]),"LMA"))+
+                              "recalcitrants","LMA",
+                              expression(C[mass]),
+                              expression(N[mass]),
+                              expression(C[area]),
+                              expression(N[area])))+
   geom_hline(yintercept=0.8,linetype="dashed",size=2)+
   scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
   ylim(c(0,3))
 
-pdf("Manuscript/Fig5.pdf",height=8,width=8)
-VIP_intact_plot/VIP_ground_plot+
-  plot_layout(guides="collect") & theme(legend.position = "right")
+VIP_ground_plot_facet<-ggplot(VIP_ground_long,
+                              aes(x=wavelength,y=value,color=variable))+
+  geom_line(linewidth=1.25)+theme_bw()+
+  theme(text=element_text(size=20),
+        strip.background = element_blank(),
+        strip.text.x = element_blank())+
+  labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
+  ggtitle("Ground")+
+  facet_wrap(~side)+
+  scale_color_manual(values=focal_palette,
+                     labels=c("solubles","hemicellulose",
+                              "recalcitrants","LMA",
+                              expression(C[mass]),
+                              expression(N[mass]),
+                              expression(C[area]),
+                              expression(N[area])))+
+  geom_hline(yintercept=0.8,linetype="dashed",size=2)+
+  scale_x_continuous(expand = c(0, 0),limits=c(390,2410))+
+  ylim(c(0,3))+guides(color="none")
+
+pdf("Manuscript/Fig5.pdf",height=8,width=10)
+(VIP_intact_plot_facet)/
+  (VIP_ground_plot_facet)+
+  plot_layout(guides="collect") & 
+  theme(legend.position = "bottom")
 dev.off()
 
 ###################################

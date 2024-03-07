@@ -179,9 +179,11 @@ source("VIP.R")
 VIP_intact<-data.frame(sol=VIP(sol_intact)[ncomp_sol_intact,],
                        hemi=VIP(hemi_intact)[ncomp_hemi_intact,],
                        recalc=VIP(recalc_intact)[ncomp_recalc_intact,],
+                       LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
                        Cmass=VIP(Cmass_intact)[ncomp_Cmass_intact,],
                        Nmass=VIP(Nmass_intact)[ncomp_Nmass_intact,],
-                       LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
+                       Carea=VIP(Carea_intact)[ncomp_Carea_intact,],
+                       Narea=VIP(Narea_intact)[ncomp_Narea_intact,],
                        wavelength=400:1000)
 saveRDS(VIP_intact,"SavedResults/VIP_intact_vnir.rds")
 
@@ -413,24 +415,37 @@ write.csv(summ,"SavedResults/stat_summary.csv")
 #####################################
 ## plot VIP
 
-focal_palette=palette(brewer.pal(8,name="Set2")[c(1,3,4,5,6,8)])
+focal_palette=palette(brewer.pal(8,name="Set2"))
 
 VIP_intact_vnir_long<-melt(VIP_intact,id.vars = "wavelength")
-levels(VIP_intact_vnir_long$variable)<-c("sol","hemi","recalc","Cmass","Nmass","LMA")
+levels(VIP_intact_vnir_long$variable)<-c("sol","hemi","recalc","LMA",
+                                         "Cmass","Nmass","Carea","Narea")
 
-VIP_intact_vnir_plot<-ggplot(VIP_intact_vnir_long,
-                           aes(x=wavelength,y=value,color=variable))+
-  geom_line(size=1.25)+theme_bw()+
-  theme(text=element_text(size=20))+
+plot_left<-c("sol","hemi","recalc","LMA")
+
+VIP_intact_vnir_long$side<-ifelse(VIP_intact_vnir_long$variable %in% plot_left,
+                                  "left","right")
+
+VIP_intact_vnir_plot_facet<-ggplot(VIP_intact_vnir_long,
+                                   aes(x=wavelength,y=value,color=variable))+
+  geom_line(linewidth=1.25)+theme_bw()+
+  theme(text=element_text(size=20),
+        legend.position = "bottom",
+        strip.background = element_blank(),
+        strip.text.x = element_blank())+
   labs(y="VIP",x="Wavelength (nm)",color = "Trait")+
+  facet_wrap(~side)+
   scale_color_manual(values=focal_palette,
                      labels=c("solubles","hemicellulose",
-                              "recalcitrants",expression(C[mass]),
-                              expression(N[mass]),"LMA"))+
+                              "recalcitrants","LMA",
+                              expression(C[mass]),
+                              expression(N[mass]),
+                              expression(C[area]),
+                              expression(N[area])))+
   geom_hline(yintercept=0.8,linetype="dashed",size=2)+
-  scale_x_continuous(expand = c(0, 0),limits=c(390,1010))+
+  scale_x_continuous(expand = c(0, 0),limits=c(370,1030))+
   ylim(c(0,3))
 
-pdf("Manuscript/FigS4.pdf",height=5,width=7)
-VIP_intact_vnir_plot
+pdf("Manuscript/FigS4.pdf",height=5,width=10)
+VIP_intact_vnir_plot_facet
 dev.off()

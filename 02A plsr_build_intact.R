@@ -176,9 +176,11 @@ source("VIP.R")
 VIP_intact<-data.frame(sol=VIP(sol_intact)[ncomp_sol_intact,],
                        hemi=VIP(hemi_intact)[ncomp_hemi_intact,],
                        recalc=VIP(recalc_intact)[ncomp_recalc_intact,],
+                       LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
                        Cmass=VIP(Cmass_intact)[ncomp_Cmass_intact,],
                        Nmass=VIP(Nmass_intact)[ncomp_Nmass_intact,],
-                       LMA=VIP(LMA_intact)[ncomp_LMA_intact,],
+                       Carea=VIP(Carea_intact)[ncomp_Carea_intact,],
+                       Narea=VIP(Narea_intact)[ncomp_Narea_intact,],
                        wavelength=400:2400)
 saveRDS(VIP_intact,"SavedResults/VIP_intact.rds")
 
