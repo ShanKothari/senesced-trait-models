@@ -142,13 +142,16 @@ LMA_lower<-min(all.LMA,na.rm=T)-25
 sol_intact_val_plot<-ggplot(intact_jack_df_list$sol,
                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(sol_lower,sol_upper),ylim=c(sol_lower,sol_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
+  theme(text = element_text(size=20))+
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
   guides(color=F)+
   ggtitle("Intact")
@@ -156,39 +159,53 @@ sol_intact_val_plot<-ggplot(intact_jack_df_list$sol,
 hemi_intact_val_plot<-ggplot(intact_jack_df_list$hemi,
                              aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(hemi_lower,hemi_upper),ylim=c(hemi_lower,hemi_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
+  coord_cartesian(xlim=c(hemi_lower,hemi_upper),
+                  ylim=c(hemi_lower,hemi_upper))+
+  theme(text = element_text(size=20))+
+  labs(y="Measured hemicellulose (%)",
+       x="Predicted hemicellulose (%)")+
   guides(color=F)
 
 recalc_intact_val_plot<-ggplot(intact_jack_df_list$recalc,
                                aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(recalc_lower,recalc_upper),c(recalc_lower,recalc_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
-  labs(y="Measured recalcalcitrants (%)",x="Predicted recalcitrants (%)")+
-  guides(color=F)
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
+  coord_cartesian(xlim=c(recalc_lower,recalc_upper),
+                  ylim=c(recalc_lower,recalc_upper))+
+  theme(text = element_text(size=20))+
+  labs(y="Measured recalcalcitrants (%)",
+       x="Predicted recalcitrants (%)")+
+  guides(color="none")
 
 Cmass_intact_val_plot<-ggplot(intact_jack_df_list$Cmass,
                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
-  coord_cartesian(xlim=c(Cmass_lower,Cmass_upper),ylim=c(Cmass_lower,Cmass_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
+  coord_cartesian(xlim=c(Cmass_lower,Cmass_upper),
+                  ylim=c(Cmass_lower,Cmass_upper))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured C"[mass]*" (%)"),
        x=expression("Predicted C"[mass]*" (%)"))+
   guides(color=F)+
@@ -197,13 +214,16 @@ Cmass_intact_val_plot<-ggplot(intact_jack_df_list$Cmass,
 Nmass_intact_val_plot<-ggplot(intact_jack_df_list$Nmass,
                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(Nmass_lower,Nmass_upper),ylim=c(Nmass_lower,Nmass_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured N"[mass]*" (%)"),
        x=expression("Predicted N"[mass]*" (%)"))+
   guides(color=F)
@@ -211,28 +231,34 @@ Nmass_intact_val_plot<-ggplot(intact_jack_df_list$Nmass,
 Carea_intact_val_plot<-ggplot(intact_jack_df_list$Carea,
                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(c(Carea_lower,Carea_upper),
                   c(Carea_lower,Carea_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured C"[area]*" (g/m"^2*")"),
        x=expression("Predicted C"[area]*" (g/m"^2*")"))
 
 Narea_intact_val_plot<-ggplot(intact_jack_df_list$Narea,
                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(c(Narea_lower,Narea_upper),
                   c(Narea_lower,Narea_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured N"[area]*" (g/m"^2*")"),
        x=expression("Predicted N"[area]*" (g/m"^2*")"))+
   guides(color=F)
@@ -240,13 +266,16 @@ Narea_intact_val_plot<-ggplot(intact_jack_df_list$Narea,
 LMA_intact_val_plot<-ggplot(intact_jack_df_list$LMA,
                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
-  theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25))+
+  theme(text = element_text(size=20))+
   labs(y=expression("Measured LMA (g/m"^2*")"),
        x=expression("Predicted LMA (g/m"^2*")"))+
   guides(color=F)
@@ -254,13 +283,16 @@ LMA_intact_val_plot<-ggplot(intact_jack_df_list$LMA,
 sol_ground_val_plot<-ggplot(ground_jack_df_list$sol,
                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(sol_lower,sol_upper),ylim=c(sol_lower,sol_upper))+
   theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y="Measured solubles (%)",x="Predicted solubles (%)")+
@@ -270,13 +302,16 @@ sol_ground_val_plot<-ggplot(ground_jack_df_list$sol,
 hemi_ground_val_plot<-ggplot(ground_jack_df_list$hemi,
                              aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(hemi_lower,hemi_upper),ylim=c(hemi_lower,hemi_upper))+
   theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y="Measured hemicellulose (%)",x="Predicted hemicellulose (%)")+
@@ -285,27 +320,34 @@ hemi_ground_val_plot<-ggplot(ground_jack_df_list$hemi,
 recalc_ground_val_plot<-ggplot(ground_jack_df_list$recalc,
                                aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(recalc_lower,recalc_upper),ylim=c(recalc_lower,recalc_upper))+
   theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
-  labs(y="Measured recalcitrants (%)",x="Predicted recalcitrants (%)")
+  labs(y="Measured recalcitrants (%)",
+       x="Predicted recalcitrants (%)")
 
 Cmass_ground_val_plot<-ggplot(ground_jack_df_list$Cmass,
                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(Cmass_lower,Cmass_upper),ylim=c(Cmass_lower,Cmass_upper))+
   theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y=expression("Measured C"[mass]*" (%)"),
@@ -316,13 +358,16 @@ Cmass_ground_val_plot<-ggplot(ground_jack_df_list$Cmass,
 Nmass_ground_val_plot<-ggplot(ground_jack_df_list$Nmass,
                               aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(Nmass_lower,Nmass_upper),ylim=c(Nmass_lower,Nmass_upper))+
   theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y=expression("Measured N"[mass]*" (%)"),
@@ -332,13 +377,16 @@ Nmass_ground_val_plot<-ggplot(ground_jack_df_list$Nmass,
 LMA_ground_val_plot<-ggplot(ground_jack_df_list$LMA,
                             aes(y=Measured,x=pred_mean,color=Species))+
   theme_bw()+
+  geom_abline(slope=1,intercept=0,linetype="dashed",size=2.5)+
   geom_errorbarh(aes(y=Measured,xmin=pred_low,xmax=pred_high),
                  color="darkslategrey",alpha=0.7)+
-  geom_point(size=2)+geom_smooth(method="lm",se=F)+
-  geom_abline(slope=1,intercept=0,linetype="dashed",size=2)+
+  geom_point(size=2)+
+  geom_smooth(method="lm",se=F,linewidth=0.75)+
+  geom_smooth(aes(y=Measured,x=pred_mean),
+              method="lm",se=F,color="red",
+              linewidth=2)+
   coord_cartesian(xlim=c(LMA_lower,LMA_upper),ylim=c(LMA_lower,LMA_upper))+
   theme(text = element_text(size=20),
-        legend.position = c(0.8, 0.25),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())+
   labs(y=expression("Measured LMA (g/m"^2*")"),
