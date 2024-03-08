@@ -238,7 +238,7 @@ meta(ground_spec_agg)$PSRI<-(ground_spec_agg[,678]-ground_spec_agg[,500])/ground
 meta(intact_spec_agg)$CIre<-rowMeans(as.matrix(intact_spec_agg[,760:800]))/rowMeans(as.matrix(intact_spec_agg[,690:710]))-1
 meta(ground_spec_agg)$CIre<-rowMeans(as.matrix(ground_spec_agg[,760:800]))/rowMeans(as.matrix(ground_spec_agg[,690:710]))-1
 
-intact_PSRI<-ggplot(meta(intact_spec_agg),
+intact_Nmass_PSRI<-ggplot(meta(intact_spec_agg),
                     aes(x=PSRI,y=Nmass,color=sp))+
   geom_point()+
   geom_smooth(method="lm",se=F)+
@@ -251,7 +251,7 @@ intact_PSRI<-ggplot(meta(intact_spec_agg),
        title="Intact-leaf spectra",
        color="Species")
 
-ground_PSRI<-ggplot(meta(ground_spec_agg),
+ground_Nmass_PSRI<-ggplot(meta(ground_spec_agg),
                     aes(x=PSRI,y=Nmass,color=sp))+
   geom_point()+
   geom_smooth(method="lm",se=F)+
@@ -266,7 +266,7 @@ ground_PSRI<-ggplot(meta(ground_spec_agg),
        title="Ground-leaf spectra",
        color="Species")
 
-intact_CIre<-ggplot(meta(intact_spec_agg),
+intact_Nmass_CIre<-ggplot(meta(intact_spec_agg),
                     aes(x=CIre,y=Nmass,color=sp))+
   geom_point()+
   geom_smooth(method="lm",se=F)+
@@ -278,7 +278,7 @@ intact_CIre<-ggplot(meta(intact_spec_agg),
        y=expression(paste("N"[mass]," (%)")),
        color="Species")
 
-ground_CIre<-ggplot(meta(ground_spec_agg),
+ground_Nmass_CIre<-ggplot(meta(ground_spec_agg),
                     aes(x=CIre,y=Nmass,color=sp))+
   geom_point()+
   geom_smooth(method="lm",se=F)+
@@ -291,15 +291,74 @@ ground_CIre<-ggplot(meta(ground_spec_agg),
        y=expression(paste("N"[mass]," (%)")),
        color="Species")
 
-plot_compile_indices<-ggpubr::ggarrange(intact_PSRI,ground_PSRI,
-                                        intact_CIre,ground_CIre,
-                                        ncol=2,nrow=2,
-                                        common.legend=T,legend="right")
-
-
-pdf("Manuscript/FigXX.pdf")
-(intact_PSRI+ground_PSRI)/
-  (intact_CIre+ground_CIre) &
+pdf("Manuscript/FigS5.pdf",width = 11,height=12)
+(intact_Nmass_PSRI+ground_Nmass_PSRI)/
+  (intact_Nmass_CIre+ground_Nmass_CIre) &
   plot_layout(guides="collect") &
   theme(legend.position = "bottom")
 dev.off()
+
+intact_recalc_PSRI<-ggplot(meta(intact_spec_agg),
+                          aes(x=PSRI,y=recalcitrant,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20))+
+  guides(color="none")+
+  coord_cartesian(ylim=c(18,61))+
+  labs(x="Plant Senescence Reflectance Index",
+       y="Recalcitrants (%)",
+       title="Intact-leaf spectra",
+       color="Species")
+
+ground_recalc_PSRI<-ggplot(meta(ground_spec_agg),
+                          aes(x=PSRI,y=recalcitrant,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  guides(color="none")+
+  coord_cartesian(ylim=c(18,61))+
+  labs(x="Plant Senescence Reflectance Index",
+       y="Recalcitrants (%)",
+       title="Ground-leaf spectra",
+       color="Species")
+
+intact_recalc_CIre<-ggplot(meta(intact_spec_agg),
+                          aes(x=CIre,y=recalcitrant,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20))+
+  guides(color="none")+
+  coord_cartesian(ylim=c(18,61))+
+  labs(x="Red-Edge Chlorophyll Index",
+       y="Recalcitrants (%)",
+       color="Species")
+
+ground_recalc_CIre<-ggplot(meta(ground_spec_agg),
+                          aes(x=CIre,y=recalcitrant,color=sp))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  theme_bw()+
+  theme(text=element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())+
+  coord_cartesian(ylim=c(18,61))+
+  labs(x="Red-Edge Chlorophyll Index",
+       y="Recalcitrants (%)",
+       color="Species")
+
+pdf("Manuscript/FigS6.pdf",width = 11,height=12)
+(intact_recalc_PSRI+ground_recalc_PSRI)/
+  (intact_recalc_CIre+ground_recalc_CIre) &
+  plot_layout(guides="collect") &
+  theme(legend.position = "bottom")
+dev.off()
+
+Anova(lm(recalcitrant~CIre*sp,
+         data=meta(intact_spec_agg)),type="III")
+Anova(lm(recalcitrant~PSRI*sp,
+         data=meta(intact_spec_agg)),type="III")
