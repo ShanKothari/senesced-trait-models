@@ -446,6 +446,6 @@ VIP_intact_swir_plot_facet<-ggplot(VIP_intact_swir_long,
   scale_x_continuous(expand = c(0, 0),limits=c(1290,2430))+
   ylim(c(0,3))
 
-pdf("Manuscript/FigS3.pdf",height=5,width=10)
+pdf("Manuscript/FigS4.pdf",height=5,width=10)
 VIP_intact_swir_plot_facet
 dev.off()
